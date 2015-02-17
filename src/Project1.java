@@ -16,11 +16,19 @@ import java.util.Vector;
 public class Project1{
 
 	public static void main(String[] args) {
-		// Project1 fields
+		/**
+		 * Input file path
+		 */
 		String inputName = (System.getProperty("user.dir") + System.getProperty("file.separator") + "project1_input.txt");
+		/**
+		 * Output file path
+		 */
 		String outputName = (System.getProperty("user.dir") + System.getProperty("file.separator") + "project1_output.txt");
 //		System.out.println(fileName);
         
+		/**
+		 * Driver object
+		 */
         Driver driveClass = new Driver();
         driveClass.ReadFile(inputName);
         driveClass.PrintData(outputName);
@@ -28,25 +36,32 @@ public class Project1{
 }
 
 /**
- * The Driver class reads the file and prints out results of assigning scores
+ * The Driver class reads the input file and prints the results of assigning scores to the output file
  * @author msnyde8
  */
 class Driver {
-	// Driver fields
+
+	/**
+	 * Average of scores
+	 */
     private Double scoreAvg;
+	/**
+	 * Vector of scores from input file
+	 */
     private Vector<AssignScore> scores;
         
-    // Driver constructor
+    /**
+     * Driver constructor
+     */
     Driver()
     {
     	scoreAvg = 0.0;
     	scores = new Vector<AssignScore>();
     }
     
-    // Driver methods
     /**
      * Read the class scores from the input file
-     * @param inputName file path of class scores
+     * @param inputName file path of class scores input file
      */
     void ReadFile(String inputName)
     {
@@ -65,22 +80,31 @@ class Driver {
     		        AssignScore assignScore = new AssignScore(Integer.parseInt(strTokened.nextElement().toString()));
     			    scores.addElement(assignScore);
     			    scoreAvg = ( ( (scoreAvg * (scores.size() - 1) ) + scores.lastElement().getScore()) / scores.size());
-//    			    System.out.println(scores.lastElement() + " " + scoreAvg);
+//    			    System.out.println(scores.lastElement().getScore() + " " + scoreAvg);
     		    }
             	
                 readBuff = buffRead.readLine();
             }
+        }
+        catch(FileNotFoundException e)
+        {
+        	System.out.println("Caught FileNotFoundException when reading file " + inputName + ": " + e.getMessage());
         }
 		catch(IOException e)
 		{
             System.out.println("Caught IOException: " + e.getMessage());
         	e.printStackTrace();
 		}
+	    catch(NumberFormatException e)
+	    {
+	    	System.out.println("Caught NumberFormatException: " + e.getMessage());
+	    	e.printStackTrace();
+	    }
     }
     
     /**
      * Print the grades for the class scores to output file
-     * @param outputName file path to print the class scores and grades
+     * @param outputName file path of output file to print the class scores and grades
      */
     void PrintData(String outputName)
     {
@@ -112,7 +136,7 @@ class Driver {
 
 /**
  * The AssignScore class will determine if grade is Outstanding/Unsatisfactory/Satisfactory (O/U/S)
- * @author snydemj1
+ * @author msnyde8
  */
 class AssignScore {
 	
@@ -127,7 +151,7 @@ class AssignScore {
     
     /**
      * AssignScore constructor
-     * @param newScore
+     * @param newScore - score
      */
     AssignScore(Integer newScore)
     {
@@ -155,11 +179,19 @@ class AssignScore {
 	    }
     }
     
+    /**
+     * getGrade returns grade value
+     * @return String - grade
+     */
     String getGrade()
     {
     	return grade;
     }
     
+    /**
+     * getScore returns score value
+     * @return Integer - score
+     */
     Integer getScore()
     {
     	return score;
