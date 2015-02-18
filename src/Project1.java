@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -73,12 +74,14 @@ class Driver {
             
             while(readBuff != null)
             {
-    		    StringTokenizer strTokened = new StringTokenizer(readBuff, " ");
+    		    StringTokenizer strTokened = new StringTokenizer(readBuff, " ,\t");
     		
     	        while(strTokened.hasMoreElements())
     		    {
+    	        	// Add new AssignScore object for each score read from the input file
     		        AssignScore assignScore = new AssignScore(Integer.parseInt(strTokened.nextElement().toString()));
     			    scores.addElement(assignScore);
+    			    // Recompute average score as each AssignScore object is added
     			    scoreAvg = ( ( (scoreAvg * (scores.size() - 1) ) + scores.lastElement().getScore()) / scores.size());
 //    			    System.out.println(scores.lastElement().getScore() + " " + scoreAvg);
     		    }
@@ -100,6 +103,11 @@ class Driver {
 	    	System.out.println("Caught NumberFormatException: " + e.getMessage());
 	    	e.printStackTrace();
 	    }
+	    catch(NoSuchElementException e)
+	    {
+	    	System.out.println("Caught NoSuchElementException: " + e.getMessage());
+	    	e.printStackTrace();
+	    }
     }
     
     /**
@@ -116,14 +124,14 @@ class Driver {
 
 		    Iterator<AssignScore> iter = scores.iterator();
 		    
-		    do
-		    {
+		    while(iter.hasNext())
+		    {	
 		    	AssignScore scoreGrade = iter.next();
 		    	scoreGrade.calcGrade(scoreAvg);
 //		    	System.out.println("  " + scoreGrade.score + "       " + scoreGrade.grade);
 			    writer.write("  " + scoreGrade.getScore() + "       " + scoreGrade.getGrade() + System.getProperty("line.separator"));
             
-		    }while(iter.hasNext());
+		    }
 		    
 		    writer.close();
         }
@@ -131,6 +139,11 @@ class Driver {
         {
         	System.out.println("Caught FileNotFoundException when writing to file " + outputName + ": " + e.getMessage());
         }
+	    catch(NoSuchElementException e)
+	    {
+	    	System.out.println("Caught NoSuchElementException: " + e.getMessage());
+	    	e.printStackTrace();
+	    }
 	}
 }
 
