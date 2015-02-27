@@ -1,0 +1,38 @@
+$insert
+	Golf is indeed the fastest-growing game 
+	on an international level.
+	A life long game for 
+	every golf addict
+	In the United States alone there are
+	over twenty-five millions golfers,
+	playing over 15,000 courses. 
+	Once considered the game of the wealthy,
+	golf is changing its image. 
+	Exclusive clubs are 
+	no longer the mode of the day, 
+	as architects are building
+	courses for the public.
+$delete 3,4
+$print
+$delete 3,2 (wrong)
+$line 3
+insert      (wrong)
+$search Woods
+$line 1
+$insert
+	Tiger Woods is a famous golfer
+	as well as a wealthy person
+$search Tiger
+Can I input a line of text here? (wrong)
+$print 2,5
+$line 8
+$insert
+	When you are out on the golf course,
+	it is a different world. The air is
+	clear, and the world is a calmer place
+	on the golf course, no matter how frustrated
+	one gets.
+$print 100  (wrong)
+$display   (wrong)
+$print
+$done
