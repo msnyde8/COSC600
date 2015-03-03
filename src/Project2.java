@@ -108,6 +108,8 @@ class Driver {
             	
                 readBuff = buffRead.readLine();
             }
+            
+            buffRead.close();
         }
 	    catch(FileNotFoundException e)
         {
