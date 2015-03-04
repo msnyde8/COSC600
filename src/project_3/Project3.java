@@ -14,20 +14,20 @@ public class Project3 {
 		try
 		{
 			writer = new PrintWriter(outputName);
-			System.out.println("Problem 6: ");
-			writer.write("Problem 6: " + System.getProperty("line.separator"));
-			problem_6();
+			//System.out.println("Problem 6: ");
+			//writer.write("Problem 6: " + System.getProperty("line.separator"));
+			//problem_6();
 		
-			System.out.println("Problem 7 - (2,8): ");
-			writer.write("Problem 7 - (2,8): " + System.getProperty("line.separator"));
-			problem_7(2,8);
+			//System.out.println("Problem 7 - (2,8): ");
+			//writer.write("Problem 7 - (2,8): " + System.getProperty("line.separator"));
+			//problem_7(2,8);
 			//System.out.println("Problem 7 - (5,6): ");
 			//problem_7(5,6);
 			//System.out.println("Problem 7 - (7,5): ");
 			//problem_7(7,5);
-			System.out.println("Problem 8: ");
-			writer.write("Problem 8: " + System.getProperty("line.separator"));
-			problem_8();
+			//System.out.println("Problem 8: ");
+			//writer.write("Problem 8: " + System.getProperty("line.separator"));
+			//problem_8();
 			System.out.println("Problem 9: " + System.getProperty("line.separator"));
 			writer.write("Problem 9: " + System.getProperty("line.separator") + System.getProperty("line.separator"));
 			System.out.println("Part 1: ");
