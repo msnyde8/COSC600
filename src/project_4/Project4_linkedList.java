@@ -1,11 +1,14 @@
+package project_4;
 
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class Project4 {
+public class Project4_linkedList {
 	
-	static linkedNodes storedData = new linkedNodes();
+	static LinkedList<String> storedData = new LinkedList<String>();
 	static Scanner lineReader = new Scanner(System.in);
 	static int currentLine = 0;
 
@@ -22,7 +25,7 @@ public class Project4 {
 			do
 			{
 				textStr = lineReader.nextLine();
-				StringTokenizer strToken = new StringTokenizer(textStr, " ,");
+				StringTokenizer strToken = new StringTokenizer(textStr, " ");
 				String switchStr = "";
 				if(strToken.hasMoreElements())
 				{
@@ -32,11 +35,12 @@ public class Project4 {
 				switch(switchStr)
 				{
 					case "$insert":
-						//System.out.println("Insert statement found!");
+						System.out.println("Insert statement found!");
 						insertMode = true;
+						insertStatement("");
 						break;
 					case "$delete":
-						//System.out.println("Delete statement found!");
+						System.out.println("Delete statement found!");
 						if(storedData.size() > 0)
 						{
 							deleteStatement(strToken);
@@ -44,7 +48,7 @@ public class Project4 {
 						insertMode = false;
 						break;
 					case "$print":
-						//System.out.println("Print statement found!");
+						System.out.println("Print statement found!");
 						if(storedData.size() > 0)
 						{
 							printStatement(strToken);
@@ -52,12 +56,12 @@ public class Project4 {
 						insertMode = false;
 						break;
 					case "$line":
-						//System.out.println("Line statement found!");
+						System.out.println("Line statement found!");
 						lineStatement(strToken);
 						insertMode = false;
 						break;
 					case "$search":
-						//System.out.println("Search statement found!");
+						System.out.println("Search statement found!");
 						searchStatement(strToken);
 						insertMode = false;
 						break;
@@ -96,20 +100,15 @@ public class Project4 {
 	{
 		try
 		{
-			if((textStr == "$insert") || (textStr == ""))
+			if((textStr == "") && (lineReader.hasNext()))
 			{
-				return;
-			}
-			else if(currentLine == storedData.size())
-			{
-				currentLine++;
-				storedData.add(currentLine, textStr);
+				storedData.add(currentLine, lineReader.nextLine());
 			}
 			else
 			{
 				storedData.add(currentLine, textStr);
-				currentLine++;
 			}
+			currentLine++;
 		}
 		catch(IllegalStateException|NoSuchElementException|UnsupportedOperationException|
 				ClassCastException|IllegalArgumentException e)
@@ -128,13 +127,13 @@ public class Project4 {
 			
 			if(0 == strTokenized.countTokens())
 			{
-				beginLine = 1;
-				endLine = storedData.size();
+				beginLine = storedData.indexOf(storedData.getFirst()) + 1;
+				endLine = storedData.indexOf(storedData.getLast()) + 1;
 			}
 			else if(2 == strTokenized.countTokens())
 			{
-				beginLine = Integer.parseInt(strTokenized.nextElement().toString());
-				endLine = Integer.parseInt(strTokenized.nextElement().toString());
+				beginLine = Integer.parseInt(strTokenized.nextElement().toString()) + 1;
+				endLine = Integer.parseInt(strTokenized.nextElement().toString()) + 1;
 			}
 			else
 			{
@@ -142,7 +141,7 @@ public class Project4 {
 				return;
 			}
 
-			//System.out.println("beginLine = " + beginLine + "; endLine = " + endLine + "; size = " + storedData.size());
+			System.out.println("beginLine = " + beginLine + "; endLine = " + endLine + "; size = " + storedData.size());
 						
 			if((beginLine > storedData.size()) || (endLine > storedData.size()) ||
 					(endLine < beginLine) || (beginLine < 1))
@@ -151,18 +150,18 @@ public class Project4 {
 				return;
 			}
 			
-			for(int i = beginLine; i < endLine+1; ++i)
+			ListIterator<String> dataIterator = storedData.listIterator(beginLine-1);
+			//for(dataIterator = storedData.listIterator(beginLine);
+			//		dataIterator.hasNext(), dataIterator != storedData.listIterator(endLine); )
+			while(dataIterator.hasNext() && (dataIterator.nextIndex() != endLine+1))
 			{
-				linkNode tmpNode = storedData.getAtIndex(i);
 				String indicateLine = "";
-						
-				if(currentLine == i)
+
+				if(currentLine == (dataIterator.nextIndex()+1))
 				{
-					indicateLine = "Current ";
+					indicateLine = "CurrentLine: ";
 				}
-				indicateLine = indicateLine + "Line " + i + ": ";
-				
-				System.out.println(indicateLine + tmpNode.dataStr);
+				System.out.println(indicateLine + dataIterator.next());
 			}
 		}
 		catch(IllegalStateException|NoSuchElementException|NumberFormatException e)
@@ -175,7 +174,7 @@ public class Project4 {
 	static void deleteStatement(StringTokenizer strTokenized)
 	{
 		try
-		{		
+		{
 			if(2 != strTokenized.countTokens())
 			{
 				System.out.println("Incorrect number of delete parameters");
@@ -185,24 +184,29 @@ public class Project4 {
 			int beginLine = Integer.parseInt(strTokenized.nextElement().toString());
 			int endLine = Integer.parseInt(strTokenized.nextElement().toString());
 			
-			//System.out.println("beginLine = " + beginLine + "; endLine = " + endLine + ";");
+			System.out.println("beginLine = " + beginLine + "; endLine = " + endLine + ";");
 			
-			if((beginLine > storedData.size()) || (endLine > storedData.size()) ||
-					(beginLine < 1) || (endLine < 1) ||	(endLine < beginLine))
+			if((beginLine >= storedData.size()) || (endLine >= storedData.size()) ||
+					(beginLine <= storedData.indexOf(storedData.getFirst())) ||
+					(endLine <= storedData.indexOf(storedData.getFirst())) ||
+					(endLine < beginLine))
 			{
 				System.out.println("Delete lines requested are out of bounds");
 				return;
 			}
 			
-			for(int i = beginLine; i <= endLine; --endLine)
+			ListIterator<String> dataIterator = storedData.listIterator(beginLine-1);
+
+			while(dataIterator.hasNext() && (dataIterator.nextIndex() != endLine))
 			{
-				storedData.removeAtIndex(i);
+				dataIterator.next();
+				dataIterator.remove();
+				endLine--;
 				if(currentLine >= beginLine)
 				{
 					currentLine--;
 				}
 			}
-			
 		}
 		catch(IllegalStateException|NoSuchElementException|NumberFormatException e)
 		{
@@ -223,21 +227,16 @@ public class Project4 {
 			
 			String searchStr = strTokenized.nextElement().toString();
 			
-			linkNode tmpNode = storedData.getFirst();
-			int countNode = 1;
-			do
+			ListIterator<String> dataIterator = storedData.listIterator();
+			while(dataIterator.hasNext())
 			{
-				String tokenStr = tmpNode.dataStr;
+				String tokenStr = dataIterator.next();
 				if(tokenStr.contains(searchStr))
 				{
-					String cmdStr = (countNode + " " + countNode);
-					StringTokenizer strTok = new StringTokenizer(cmdStr, " ,");
-					
-					printStatement(strTok);
+					System.out.println(tokenStr);
 					break;
 				}
-				tmpNode = tmpNode.next;
-			}while(tmpNode != null);
+			}
 			
 		}
 		catch(NoSuchElementException e)
@@ -258,8 +257,8 @@ public class Project4 {
 			}
 			
 			int newLine = Integer.parseInt(strTokenized.nextElement().toString());
-
-			if((newLine > storedData.size()) || (newLine < 1))
+						
+			if((newLine > storedData.size()) || (newLine < storedData.indexOf(storedData.getFirst())))
 			{
 				System.out.println("Line requested is out of bounds");
 				return;
@@ -268,16 +267,17 @@ public class Project4 {
 			currentLine = newLine;
 			
 			Integer beginLine = newLine - 3;
-			if(beginLine < 1)
+			if(beginLine < storedData.indexOf(storedData.getFirst()))
 			{
-				beginLine = 1;
+				beginLine = storedData.indexOf(storedData.getFirst());
 			}
 			Integer endLine = newLine + 3;
-			if(endLine > storedData.size())
+			if(endLine > storedData.indexOf(storedData.getLast()))
 			{
-				endLine = storedData.size();
+				endLine = storedData.indexOf(storedData.getLast());
 			}
 			String cmdStr = (beginLine.toString() + " " + endLine.toString());
+			System.out.println(cmdStr);
 			StringTokenizer strTok = new StringTokenizer(cmdStr, " ");
 			
 			printStatement(strTok);
@@ -288,131 +288,4 @@ public class Project4 {
 			e.printStackTrace();
 		}
 	}
-}
-
-class linkedNodes {
-	
-	private static linkNode head;
-	private static linkNode curNode;
-	
-	// default constructor
-	linkedNodes()
-	{
-		// set up head
-		head = new linkNode();
-		curNode = head;
-	}
-	
-	void add(int nodeIndex, String nodeStr)
-	{
-		linkNode newNode = new linkNode(nodeStr, null);
-		
-		// if index is before first node, add to beginning
-		if(1 > nodeIndex)
-		{
-			head.next = newNode;
-			newNode.next = null;
-			curNode = newNode;
-		}
-		// if index is past the end of the list, add to end
-		else if(size() < nodeIndex)
-		{
-			curNode.next = newNode;
-			newNode.next = null;
-			curNode = newNode;
-		}
-		else
-		{
-			linkNode tmpNode = head;
-			for(int i = 1; i < nodeIndex; ++i)
-			{
-				tmpNode = tmpNode.next;
-			}
-			newNode.next = tmpNode.next;
-			tmpNode.next = newNode;
-		}
-	}
-		
-	int size()
-	{
-		int size = 0;
-		linkNode tmpNode = head;
-		while(tmpNode.next != null)
-		{
-			size++;
-			tmpNode = tmpNode.next;
-		}
-		return size;
-	}
-	
-	linkNode getFirst()
-	{
-		return head.next;
-	}
-	
-	linkNode getLast()
-	{
-		return curNode;
-	}
-	
-	linkNode getAtIndex(int nodeIndex)
-	{		
-		if(nodeIndex > size())
-			return curNode;
-		else if(nodeIndex <= 1)
-			return getFirst();
-		else
-		{
-			linkNode tmpNode = getFirst();
-			for(int i = 1; i < nodeIndex; ++i)
-			{
-				tmpNode = tmpNode.next;
-			}
-			return tmpNode;
-		}
-	}
-	
-	void removeAtIndex(int nodeIndex)
-	{
-		if(nodeIndex > size())
-			return;
-		else if(nodeIndex < 1)
-			return;
-		else
-		{
-			linkNode tmpNode = head;
-			for(int i = 1; i < nodeIndex; ++i)
-			{
-				tmpNode = tmpNode.next;
-			}
-			linkNode nextNode = tmpNode.next;
-			if(nextNode != null)
-			{
-				tmpNode.next = nextNode.next;
-			}
-			else
-			{
-				tmpNode.next = null;
-			}
-		}
-	}
-}
-
-class linkNode {
-	String dataStr;
-	linkNode next;
-	
-	linkNode()
-	{
-		dataStr = "";
-		next = null;
-	}
-	
-	linkNode(String dStr, linkNode nNode)
-	{
-		dataStr = dStr;
-		next = nNode;
-	}
-	
-	
 }
