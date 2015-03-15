@@ -25,13 +25,11 @@ public class OptionalProject {
 				switch(optionInt)
 				{
 					case 1:
-						InfixToPostfix infixPostfix = new InfixToPostfix();
-						infixPostfix.main(args);
+						InfixToPostfix.main(args);
 						end = true;
 						break;
 					case 2:
-						RPNCalcGUI calcGUI = new RPNCalcGUI();
-						calcGUI.main(args);
+						RPNCalcGUI.main(args);
 						end = true;
 						break;
 					case 0:
@@ -42,6 +40,7 @@ public class OptionalProject {
 						break;
 				}				
 			}while((false == end) && lineReader.hasNextLine());
+			lineReader.close();
 		}
 		catch(IllegalStateException e)
 		{
@@ -141,8 +140,7 @@ class RPNCalcGUI extends JFrame{
             				
             			if(true == actCmd.equals("="))
             			{
-            				InfixToPostfix inToPost = new InfixToPostfix();
-            				String rtnStr = inToPost.convertStr(displayField.getText());
+            				String rtnStr = InfixToPostfix.convertStr(displayField.getText());
             				displayField.setText(rtnStr);
             			}
             			else if(startNums)
