@@ -1,12 +1,7 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.EmptyStackException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.lang.Math;
 
 public class OptionalProject1 {
 
@@ -26,7 +21,7 @@ public class OptionalProject1 {
 		
 			while((null != charStr) && (false == charStr.isEmpty()))
 			{
-				String rtnStr = "";
+				List<String> rtnStr = new LinkedList<String>();
 				System.out.println(charStr);
 				StringTokenizer strToken = new StringTokenizer(charStr,"^*/+-() \t",true);
 				while(strToken.hasMoreTokens())
@@ -89,11 +84,11 @@ public class OptionalProject1 {
 			
 			while(null != charQueue.peek())
 			{
-				rtnStr = rtnStr + charQueue.element();
-//				System.out.print(charQueue.element());
+				rtnStr.add(charQueue.element());
+				//System.out.print(charQueue.element());
 				charQueue.remove();
 			}
-			System.out.println(rtnStr);
+			printAnswer(rtnStr);
 			charStr = inputStream.readLine();
 			}
 			inputStream.close();
@@ -156,5 +151,69 @@ public class OptionalProject1 {
 		{
 			return false;
 		}
+	}
+	
+	static private void printAnswer(List<String> postfix)
+	{
+		Double printAnswer = 0.0;
+		Stack<String> printStack = new Stack<String>();
+
+		Iterator<String> listIter = postfix.iterator();
+		while(listIter.hasNext())
+		{
+			System.out.print(listIter.next());
+		}
+		System.out.println();
+		
+		listIter = postfix.iterator();
+		while(listIter.hasNext())
+		{
+			String valStr = listIter.next();
+			if(true == isNumber(valStr))
+			{
+				printStack.push(valStr);
+			}
+			else
+			{
+				if(printStack.empty())
+				{
+					System.out.println("Statement malformed");
+					return;
+				}
+				Double secInt = Double.parseDouble(printStack.pop());
+				if(printStack.empty())
+				{
+					System.out.println("Statement malformed");
+					return;
+				}
+				Double firstInt = Double.parseDouble(printStack.pop());
+				switch(valStr)
+				{
+					case "+":
+						printAnswer = firstInt + secInt;
+						break;
+					case "-":
+					case "–":
+						printAnswer = firstInt - secInt;
+						break;
+					case "*":
+					case "x":
+						printAnswer = firstInt * secInt;
+						break;
+					case "/":
+						printAnswer = firstInt / secInt;
+						break;
+					case "^":
+						printAnswer = Math.pow(firstInt, secInt);
+						break;
+					default:
+						System.out.println("Statement malformed");
+						return;
+				}
+//				System.out.println(printAnswer);
+				printStack.add(printAnswer.toString());
+			}
+		}
+		System.out.println(printStack.pop());
 	}
 }

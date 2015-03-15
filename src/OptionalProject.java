@@ -1,13 +1,57 @@
+import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-//import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
+import java.util.List;
+import java.util.Queue;
 import java.util.regex.*;
 
 
+public class OptionalProject {
+	public static void main(String[] args) {
+		try
+		{
+			boolean end = false;
+			Scanner lineReader = new Scanner(System.in);
+			do
+			{
+				System.out.println("Would you like to input from: 1) Input file (optionalproject1_input.txt) 2) GUI or 0) Exit?");
 
-public class RPNCalcGUI extends JFrame{
+				Integer optionInt = Integer.parseInt(lineReader.nextLine());
+				switch(optionInt)
+				{
+					case 1:
+						InfixToPostfix infixPostfix = new InfixToPostfix();
+						infixPostfix.main(args);
+						end = true;
+						break;
+					case 2:
+						RPNCalcGUI calcGUI = new RPNCalcGUI();
+						calcGUI.main(args);
+						end = true;
+						break;
+					case 0:
+						end = true;
+						break;
+					default:
+						System.out.println("Incorrect option please try again");
+						break;
+				}				
+			}while((false == end) && lineReader.hasNextLine());
+		}
+		catch(IllegalStateException e)
+		{
+			System.out.println("Caught Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}
+
+class RPNCalcGUI extends JFrame{
 
 	/**
 	 * 
@@ -160,14 +204,15 @@ public class RPNCalcGUI extends JFrame{
 
 class InfixToPostfix {
 
-	private String infixStr = "";
-	private String postfixStr = "";
+	private static String infixStr = "";
+	private static List<String> postfixStr = new LinkedList<String>();
 	
-	String convertStr(String inStr)
+	static String convertStr(String inStr)
 	{
 		try
 		{
 			infixStr = inStr;
+			postfixStr.clear();
 		
 			Stack<String> operatorStack = new Stack<String>();
 			Queue<String> charQueue = new LinkedList<String>();
@@ -179,7 +224,7 @@ class InfixToPostfix {
 
 				if(true == isNumber(c))
 				{
-					System.out.println("Add to Queue: " + c);
+//					System.out.println("Add to Queue: " + c);
 					charQueue.add(c);
 				}
 				else if(true == isOperator(c))
@@ -187,13 +232,13 @@ class InfixToPostfix {
 					if((false == operatorStack.empty()) &&
 							(true == isLowerPriority(c, operatorStack.peek())))
 					{
-						System.out.println("Add to Queue: " + operatorStack.peek());
+//						System.out.println("Add to Queue: " + operatorStack.peek());
 						charQueue.add(operatorStack.pop());
 						while(false == operatorStack.empty())
 						{
 							if(true == isLowerPriority(c,operatorStack.peek()))
 							{
-								System.out.println("Add to Queue: " + operatorStack.peek());
+//								System.out.println("Add to Queue: " + operatorStack.peek());
 								charQueue.add(operatorStack.pop());
 							}
 							else
@@ -202,12 +247,12 @@ class InfixToPostfix {
 							}
 						}
 					}
-					System.out.println("Add to Stack: " + c);
+//					System.out.println("Add to Stack: " + c);
 					operatorStack.add(c);
 				}
 				else if(true == c.equals("("))
 				{
-					System.out.println("Add to Stack: " + c);
+//					System.out.println("Add to Stack: " + c);
 					operatorStack.add(c);
 				}
 				else if (true == c.equals(")"))
@@ -215,12 +260,12 @@ class InfixToPostfix {
 					while((false == operatorStack.empty()) &&
 							(false == operatorStack.peek().equals("(")))
 					{
-						System.out.println("Add to Queue: " + operatorStack.peek());
+//						System.out.println("Add to Queue: " + operatorStack.peek());
 						charQueue.add(operatorStack.pop());
 					}
 					if(false == operatorStack.empty())
 					{
-						System.out.println("Remove from Stack: " + operatorStack.peek());
+//						System.out.println("Remove from Stack: " + operatorStack.peek());
 						operatorStack.pop();
 					}
 				}
@@ -233,9 +278,9 @@ class InfixToPostfix {
 			
 			while(null != charQueue.peek())
 			{
-				System.out.println(postfixStr);
-				postfixStr = postfixStr + charQueue.element();
-				System.out.println(postfixStr);
+//				System.out.println(postfixStr);
+				postfixStr.add(charQueue.element());
+//				System.out.println(postfixStr);
 				charQueue.remove();
 			}
 		}
@@ -246,7 +291,7 @@ class InfixToPostfix {
 	    	e.printStackTrace();
 		}
 		
-		return postfixStr;
+		return printAnswer(postfixStr);
 	}
 	
 	static private boolean isNumber(String c)
@@ -298,5 +343,108 @@ class InfixToPostfix {
 			return false;
 		}
 	}
+	
+	static private String printAnswer(List<String> postfix)
+	{
+		String ansStr = "ERROR - Statement malformed";
+		Double printAnswer = 0.0;
+		Stack<String> printStack = new Stack<String>();
 
+		Iterator<String> listIter = postfix.iterator();
+/*		while(listIter.hasNext())
+		{
+			System.out.print(listIter.next());
+		}
+		System.out.println();
+		
+		listIter = postfix.iterator();*/
+		while(listIter.hasNext())
+		{
+			String valStr = listIter.next();
+			if(true == isNumber(valStr))
+			{
+				printStack.push(valStr);
+			}
+			else
+			{
+				if(printStack.empty())
+				{
+					System.out.println(ansStr);
+					return ansStr;
+				}
+				Double secInt = Double.parseDouble(printStack.pop());
+				if(printStack.empty())
+				{
+					System.out.println(ansStr);
+					return ansStr;
+				}
+				Double firstInt = Double.parseDouble(printStack.pop());
+				switch(valStr)
+				{
+					case "+":
+						printAnswer = firstInt + secInt;
+						break;
+					case "-":
+					case "–":
+						printAnswer = firstInt - secInt;
+						break;
+					case "*":
+					case "x":
+						printAnswer = firstInt * secInt;
+						break;
+					case "/":
+						printAnswer = firstInt / secInt;
+						break;
+					case "^":
+						printAnswer = Math.pow(firstInt, secInt);
+						break;
+					default:
+						System.out.println(ansStr);
+						return ansStr;
+				}
+//				System.out.println(printAnswer);
+				if((printAnswer*10)%10 == 0)
+				{
+					printStack.add(((Integer)(printAnswer.intValue())).toString());
+					
+				}
+				else
+				{
+					printStack.add(printAnswer.toString());
+				}
+			}
+		}
+		ansStr = printStack.pop();
+		return ansStr;
+	}
+	
+	public static void main(String[] args) {
+		try
+		{
+			String inputName = (System.getProperty("user.dir") +
+					System.getProperty("file.separator") +
+					"optionalproject1_input.txt");
+			FileReader fileRead = new FileReader(inputName);
+			BufferedReader inputStream = new BufferedReader(fileRead);
+
+			String charStr = inputStream.readLine();
+
+		
+			while((null != charStr) && (false == charStr.isEmpty()))
+			{
+				System.out.println(charStr);
+				System.out.println(InfixToPostfix.convertStr(charStr));
+
+				charStr = inputStream.readLine();
+			}
+			inputStream.close();
+		}
+		catch(IOException|EmptyStackException|IllegalStateException|
+				ClassCastException|NullPointerException|
+				IllegalArgumentException e)
+		{
+	    	System.out.println("Caught Exception: " + e.getMessage());
+	    	e.printStackTrace();
+		}
+	}
 }
