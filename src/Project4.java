@@ -1,19 +1,25 @@
-package project_4;
+
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Project4 {
-	
-	static linkedNodes storedData = new linkedNodes();
-	static Scanner lineReader = new Scanner(System.in);
-	static int currentLine = 0;
-
 	public static void main(String[] args) {
-		String textStr = "";
-		Boolean end = false;
-		
+		Driver driveClass = new Driver();
+		driveClass.runDriver();
+	}
+}
+
+class Driver {
+	private Scanner lineReader = new Scanner(System.in);
+	private linkedNodes storedData = new linkedNodes();
+	private int currentLine = -1;
+	private	String textStr = "";
+	private Boolean end = false;
+	
+	void runDriver()
+	{
 		try
 		{
 			Boolean insertMode = false;
@@ -34,7 +40,14 @@ public class Project4 {
 				{
 					case "$insert":
 						//System.out.println("Insert statement found!");
-						insertMode = true;
+						if(strToken.hasMoreElements())
+						{
+							System.out.println("Not a valid command");
+						}
+						else
+						{
+							insertMode = true;
+						}
 						break;
 					case "$delete":
 						//System.out.println("Delete statement found!");
@@ -93,18 +106,21 @@ public class Project4 {
 		}
 	}
 	
-	static void insertStatement(String textStr)
+	void insertStatement(String textStr)
 	{
 		try
 		{
-			if((textStr == "$insert") || (textStr == ""))
+			if(true == textStr.startsWith("$"))
+			{
+				System.out.println("Not a valid command");
+			}
+			else if((textStr == "$insert") || (textStr == ""))
 			{
 				return;
 			}
-			else if(currentLine == storedData.size())
+			else if(currentLine == -1)
 			{
-				currentLine++;
-				storedData.add(currentLine, textStr);
+				storedData.add(storedData.size()+1, textStr);
 			}
 			else
 			{
@@ -120,7 +136,7 @@ public class Project4 {
 		}
 	}
 	
-	static void printStatement(StringTokenizer strTokenized)
+	void printStatement(StringTokenizer strTokenized)
 	{
 		try
 		{
@@ -159,7 +175,7 @@ public class Project4 {
 						
 				if(currentLine == i)
 				{
-					indicateLine = "Current ";
+					indicateLine = "Current Line -> ";
 				}
 				indicateLine = indicateLine + "Line " + i + ": ";
 				
@@ -173,7 +189,7 @@ public class Project4 {
 		}
 	}
 	
-	static void deleteStatement(StringTokenizer strTokenized)
+	void deleteStatement(StringTokenizer strTokenized)
 	{
 		try
 		{		
@@ -212,7 +228,7 @@ public class Project4 {
 		}
 	}
 	
-	static void searchStatement(StringTokenizer strTokenized)
+	void searchStatement(StringTokenizer strTokenized)
 	{
 		try
 		{
@@ -248,7 +264,7 @@ public class Project4 {
 		}
 	}
 	
-	static void lineStatement(StringTokenizer strTokenized)
+	void lineStatement(StringTokenizer strTokenized)
 	{
 		try
 		{
@@ -293,8 +309,8 @@ public class Project4 {
 
 class linkedNodes {
 	
-	private static linkNode head;
-	private static linkNode curNode;
+	private linkNode head;
+	private linkNode curNode;
 	
 	// default constructor
 	linkedNodes()
