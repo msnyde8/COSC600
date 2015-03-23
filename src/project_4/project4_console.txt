@@ -1,0 +1,133 @@
+Please enter a command or a line of text
+$insert
+Please enter a command or a line of text
+Golf is indeed the fastest-growing game
+Please enter a command or a line of text
+on an international level.
+Please enter a command or a line of text
+A life long game for
+Please enter a command or a line of text
+every golf addict
+Please enter a command or a line of text
+In the United States alone there are
+Please enter a command or a line of text
+over twenty-five millions golfers,
+Please enter a command or a line of text
+playing over 15,000 courses.
+Please enter a command or a line of text
+Once considered the game of the wealthy,
+Please enter a command or a line of text
+golf is changing its image.
+Please enter a command or a line of text
+Exclusive clubs are
+Please enter a command or a line of text
+no longer the mode of the day,
+Please enter a command or a line of text
+as architects are building
+Please enter a command or a line of text
+courses for the public.
+Please enter a command or a line of text
+$delete 3,4
+Please enter a command or a line of text
+$print
+Line 1: Golf is indeed the fastest-growing game
+Line 2: on an international level.
+Line 3: In the United States alone there are
+Line 4: over twenty-five millions golfers,
+Line 5: playing over 15,000 courses.
+Line 6: Once considered the game of the wealthy,
+Line 7: golf is changing its image.
+Line 8: Exclusive clubs are
+Line 9: no longer the mode of the day,
+Line 10: as architects are building
+Line 11: courses for the public.
+Please enter a command or a line of text
+$delete 3,2
+Delete lines requested are out of bounds
+Please enter a command or a line of text
+$line 3
+Line 1: Golf is indeed the fastest-growing game
+Line 2: on an international level.
+Current Line -> Line 3: In the United States alone there are
+Line 4: over twenty-five millions golfers,
+Line 5: playing over 15,000 courses.
+Line 6: Once considered the game of the wealthy,
+Please enter a command or a line of text
+insert
+Not a valid command
+Please enter a command or a line of text
+$search Woods
+Please enter a command or a line of text
+$line 1
+Current Line -> Line 1: Golf is indeed the fastest-growing game
+Line 2: on an international level.
+Line 3: In the United States alone there are
+Line 4: over twenty-five millions golfers,
+Please enter a command or a line of text
+$insert
+Please enter a command or a line of text
+Tiger Woods is a famous golfer
+Please enter a command or a line of text
+as well as a wealthy person
+Please enter a command or a line of text
+$search Tiger
+Line 1: Tiger Woods is a famous golfer
+Please enter a command or a line of text
+Can I input a line of text here?
+Not a valid command
+Please enter a command or a line of text
+$print 2,5
+Line 2: as well as a wealthy person
+Current Line -> Line 3: Golf is indeed the fastest-growing game
+Line 4: on an international level.
+Line 5: In the United States alone there are
+Please enter a command or a line of text
+$line 8
+Line 5: In the United States alone there are
+Line 6: over twenty-five millions golfers,
+Line 7: playing over 15,000 courses.
+Current Line -> Line 8: Once considered the game of the wealthy,
+Line 9: golf is changing its image.
+Line 10: Exclusive clubs are
+Line 11: no longer the mode of the day,
+Please enter a command or a line of text
+$insert
+Please enter a command or a line of text
+When you are out on the golf course,
+Please enter a command or a line of text
+it is a different world. The air is
+Please enter a command or a line of text
+clear, and the world is a calmer place
+Please enter a command or a line of text
+on the golf course, no matter how frustrated
+Please enter a command or a line of text
+one gets.
+Please enter a command or a line of text
+$print 100
+Error not enough print parameters
+Please enter a command or a line of text
+$display
+Not a valid command
+Please enter a command or a line of text
+$print
+Line 1: Tiger Woods is a famous golfer
+Line 2: as well as a wealthy person
+Line 3: Golf is indeed the fastest-growing game
+Line 4: on an international level.
+Line 5: In the United States alone there are
+Line 6: over twenty-five millions golfers,
+Line 7: playing over 15,000 courses.
+Line 8: When you are out on the golf course,
+Line 9: it is a different world. The air is
+Line 10: clear, and the world is a calmer place
+Line 11: on the golf course, no matter how frustrated
+Line 12: one gets.
+Current Line -> Line 13: Once considered the game of the wealthy,
+Line 14: golf is changing its image.
+Line 15: Exclusive clubs are
+Line 16: no longer the mode of the day,
+Line 17: as architects are building
+Line 18: courses for the public.
+Please enter a command or a line of text
+$done
+Thank you and have a nice day!

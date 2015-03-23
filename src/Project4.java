@@ -72,7 +72,7 @@ class Driver {
 						break;
 					case "$search":
 						//System.out.println("Search statement found!");
-						searchStatement(strToken);
+						searchStatement(textStr);
 						insertMode = false;
 						break;
 					case "$done":
@@ -177,6 +177,10 @@ class Driver {
 				{
 					indicateLine = "Current Line -> ";
 				}
+				else if((currentLine == -1) && (i == storedData.size()))
+				{
+					indicateLine = "Default Current Line -> ";
+				}
 				indicateLine = indicateLine + "Line " + i + ": ";
 				
 				System.out.println(indicateLine + tmpNode.dataStr);
@@ -219,7 +223,7 @@ class Driver {
 					currentLine--;
 				}
 			}
-			
+			System.out.println("Delete successful");
 		}
 		catch(IllegalStateException|NoSuchElementException|NumberFormatException e)
 		{
@@ -228,23 +232,27 @@ class Driver {
 		}
 	}
 	
-	void searchStatement(StringTokenizer strTokenized)
+	void searchStatement(String txtStr)
 	{
 		try
 		{
-			if(1 != strTokenized.countTokens())
+			StringTokenizer strTokenized = new StringTokenizer(txtStr, " ");
+			
+			if(2 != strTokenized.countTokens())
 			{
 				System.out.println("Incorrect number of search parameters");
 				return;
 			}
-			
+			strTokenized.nextElement();
 			String searchStr = strTokenized.nextElement().toString();
+			//System.out.println(searchStr);
 			
 			linkNode tmpNode = storedData.getFirst();
 			int countNode = 1;
 			do
 			{
 				String tokenStr = tmpNode.dataStr;
+				//System.out.println(tokenStr);
 				if(tokenStr.contains(searchStr))
 				{
 					String cmdStr = (countNode + " " + countNode);
@@ -254,8 +262,12 @@ class Driver {
 					break;
 				}
 				tmpNode = tmpNode.next;
+				countNode++;
 			}while(tmpNode != null);
-			
+			if(tmpNode == null)
+			{
+				System.out.println("Search string not found in text");
+			}
 		}
 		catch(NoSuchElementException e)
 		{
