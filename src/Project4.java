@@ -236,15 +236,23 @@ class Driver {
 	{
 		try
 		{
-			StringTokenizer strTokenized = new StringTokenizer(txtStr, " ");
+			StringTokenizer strTokenized = new StringTokenizer(txtStr, " ", true);
 			
-			if(2 != strTokenized.countTokens())
+			if(3 > strTokenized.countTokens())
 			{
 				System.out.println("Incorrect number of search parameters");
 				return;
 			}
+			
+			// Move past $search element
 			strTokenized.nextElement();
+			
 			String searchStr = strTokenized.nextElement().toString();
+			while(strTokenized.hasMoreElements())
+			{
+				searchStr += strTokenized.nextElement().toString();
+			}
+			searchStr = searchStr.trim();
 			//System.out.println(searchStr);
 			
 			linkNode tmpNode = storedData.getFirst();

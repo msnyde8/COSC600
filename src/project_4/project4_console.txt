@@ -28,6 +28,7 @@ Please enter a command or a line of text
 courses for the public.
 Please enter a command or a line of text
 $delete 3,4
+Delete successful
 Please enter a command or a line of text
 $print
 Line 1: Golf is indeed the fastest-growing game
@@ -40,7 +41,7 @@ Line 7: golf is changing its image.
 Line 8: Exclusive clubs are
 Line 9: no longer the mode of the day,
 Line 10: as architects are building
-Line 11: courses for the public.
+Default Current Line -> Line 11: courses for the public.
 Please enter a command or a line of text
 $delete 3,2
 Delete lines requested are out of bounds
@@ -57,6 +58,7 @@ insert
 Not a valid command
 Please enter a command or a line of text
 $search Woods
+Search string not found in text
 Please enter a command or a line of text
 $line 1
 Current Line -> Line 1: Golf is indeed the fastest-growing game
