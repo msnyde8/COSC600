@@ -223,6 +223,7 @@ class Driver {
 					currentLine--;
 				}
 			}
+			
 			System.out.println("Delete successful");
 		}
 		catch(IllegalStateException|NoSuchElementException|NumberFormatException e)
@@ -354,9 +355,18 @@ class linkedNodes {
 		// if index is past the end of the list, add to end
 		else if(size() < nodeIndex)
 		{
-			curNode.next = newNode;
-			newNode.next = null;
-			curNode = newNode;
+			if(size() == 0)
+			{
+				head.next = newNode;
+				newNode.next = null;
+				curNode = newNode;
+			}
+			else
+			{
+				curNode.next = newNode;
+				newNode.next = null;
+				curNode = newNode;
+			}
 		}
 		else
 		{
