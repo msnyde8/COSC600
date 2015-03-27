@@ -1,4 +1,4 @@
-package project5;
+package project_5;
 
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -66,7 +66,11 @@ class Driver {
 						childSwap();
 						break;
 					case 6:
-						treeCompare();
+						boolean similarTrees = treeCompare();
+						if(true == similarTrees)
+						{
+							System.out.println("Trees are identical");
+						}
 						break;
 					case 7:
 						System.out.println("Thank you and have a nice day!");
@@ -132,7 +136,7 @@ class Driver {
 	}
 	
 	// Returns the index for the createdTrees vector
-	int pickTree()
+	int pickTree(String actionStr)
 	{
 		boolean endLoop = false;
 		String choiceStr = "";
@@ -140,12 +144,12 @@ class Driver {
 		
 		if(createdTrees.isEmpty())
 		{
-			System.out.println("No trees added to traverse");
+			System.out.println("No trees added to pick");
 			return -1;
 		}
 		do
 		{
-			System.out.println("Which tree to traverse?: (1 to " + createdTrees.size() + ")");
+			System.out.println("Which tree to " + actionStr + "?: (1 to " + createdTrees.size() + ")");
 			choiceStr = lineReader.nextLine();
 			
 			if(false == choiceStr.matches("[+-]?\\d"))
@@ -171,7 +175,7 @@ class Driver {
 	}
 	void visitTree(boolean traverseInorder)
 	{
-		int treeChoice = pickTree();
+		int treeChoice = pickTree("traverse");
 		
 		if((-1 == treeChoice) || (0 < treeChoice) || ((createdTrees.size()-1) < treeChoice))
 		{
@@ -192,7 +196,7 @@ class Driver {
 	
 	void leafCount()
 	{
-		int treeChoice = pickTree();
+		int treeChoice = pickTree("count leaves");
 		
 		if((-1 == treeChoice) || (treeChoice < 0) || ((createdTrees.size()-1) < treeChoice))
 		{
@@ -202,7 +206,11 @@ class Driver {
 		System.out.println("Counting tree leaf nodes ...");
 		try
 		{
-			createdTrees.get(treeChoice).countLeaves();
+			int leafCount = createdTrees.get(treeChoice).countLeaves();
+			if(0 <leafCount)
+			{
+				System.out.println("Number of leaves: " + leafCount);
+			}
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{
@@ -213,7 +221,7 @@ class Driver {
 	
 	void childSwap()
 	{
-		int treeChoice = pickTree();
+		int treeChoice = pickTree("swap children");
 		
 		if((-1 == treeChoice) || (treeChoice < 0) || ((createdTrees.size()-1) < treeChoice))
 		{
@@ -233,9 +241,19 @@ class Driver {
 		}
 	}
 	
-	void treeCompare()
+	boolean treeCompare()
 	{
+		int firstTree = pickTree("compare(1)");
+		int secondTree = pickTree("compare(2)");
+		
+		if((-1 == firstTree) || (-1 == secondTree) || (firstTree < 0) || (secondTree < 0) ||
+				((createdTrees.size()-1) < firstTree) || ((createdTrees.size()-1) < secondTree))
+		{
+			System.out.println("Invalid trees selected");
+			return false;
+		}
 		System.out.println("Comparing trees ...");
+		return createdTrees.get(firstTree).compareTrees(createdTrees.get(secondTree)); 
 	}
 }
 
@@ -472,6 +490,33 @@ class treeNode
 			leftChild = tmpRightNode;
 		}
 	}
+	boolean compareNodes(treeNode compNode)
+	{
+		if(dataInt != compNode.dataInt)
+		{
+			System.out.println("Nodes are not the same");
+			return false;
+		}
+		if((null != leftChild) && (null != compNode.leftChild))
+		{
+			return leftChild.compareNodes(compNode.leftChild);
+		}
+		else if((null == leftChild) || (null == compNode.leftChild))
+		{
+			System.out.println("Nodes are not the same");
+			return false;
+		}
+		if((null != rightChild) && (null != compNode.rightChild))
+		{
+			return rightChild.compareNodes(compNode.rightChild);
+		}
+		else if((null == rightChild) || (null == compNode.rightChild))
+		{
+			System.out.println("Nodes are not the same");
+			return false;
+		}
+		return true;
+	}
 }
 
 class treeClass
@@ -561,11 +606,12 @@ class treeClass
 		}
 		System.out.println("Postorder: " + outputStr);
 	}
-	void countLeaves()
+	int countLeaves()
 	{
 		if(null == treeRoot)
 		{
 			System.out.println("Error: Empty Tree");
+			return -1;
 		}
 		else
 		{
@@ -573,11 +619,12 @@ class treeClass
 			leafCount = treeRoot.countLeaf(leafCount);
 			if(0 < leafCount)
 			{
-				System.out.println("Number of leaves: " + leafCount);
+				return leafCount;
 			}
 			else
 			{
 				System.out.println("Error counting leaves");
+				return -1;
 			}
 		}
 	}
@@ -591,5 +638,14 @@ class treeClass
 		{
 			treeRoot.swapChild();
 		}
+	}
+	boolean compareTrees(treeClass treeComp)
+	{
+		if((null == treeRoot) || (null == treeComp.treeRoot))
+		{
+			System.out.println("Error: One or both trees empty");
+			return false;
+		}
+		return treeRoot.compareNodes(treeComp.treeRoot);
 	}
 }
