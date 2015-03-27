@@ -1,4 +1,8 @@
 package optional_project_1;
+
+import optional_project_1.InfixToPostfix;
+import optional_project_1.RPNCalcGUI;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -12,7 +16,7 @@ import java.util.Queue;
 import java.util.regex.*;
 
 
-public class OptionalProject {
+public class OprtionalProject1_RPNCalcGUI {
 	public static void main(String[] args) {
 		try
 		{
