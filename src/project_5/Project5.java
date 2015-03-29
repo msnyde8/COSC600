@@ -27,22 +27,26 @@ class Driver {
 		do
 		{
 			System.out.println("Please enter a command:\n1) Build a tree," +
-					"\n2) Print tree inorder,\n3) Print tree postorder," +
-					"\n4) Count tree leaf nodes,\n5) Swap node children," +
-					"\n6) Compare two trees,\n7) Exit");
+					"\n2) Print tree (full or partial) inorder," +
+					"\n3) Print tree (full or partial) postorder," +
+					"\n4) Count tree leaf nodes," +
+					"\n5) Swap node children (creates new tree)," +
+					"\n6) Delete node," +
+					"\n7) Compare two trees," +
+					"\n0) Exit");
 		
 			try
 			{
 				cmdStr = lineReader.nextLine();
 				
-				if(false == cmdStr.matches("[+-]?\\d"))
+				if(false == cmdStr.matches("\\d"))
 				{
 					System.out.println("Invalid choice. Please try again.");
 					continue;
 				}
 				cmdChoice = Integer.parseInt(cmdStr);
-//				if((cmdChoice < 1) || (cmdChoice > 8))
-				if((cmdChoice < 1) || (cmdChoice > 7))
+//				if((cmdChoice < 0) || (cmdChoice > 8))
+				if((cmdChoice < 0) || (cmdChoice > 7))
 				{
 					System.out.println("Invalid choice. Please try again.");
 					continue;
@@ -66,13 +70,12 @@ class Driver {
 						childSwap();
 						break;
 					case 6:
-						boolean similarTrees = treeCompare();
-						if(true == similarTrees)
-						{
-							System.out.println("Trees are identical");
-						}
+						deleteNode();
 						break;
 					case 7:
+						treeCompare();
+						break;
+					case 0:
 						System.out.println("Thank you and have a nice day!");
 						endCmd = true;
 						break;
@@ -118,8 +121,8 @@ class Driver {
 			while(strToken.hasMoreElements())
 			{
 				treeNode newNode = new treeNode();
-				newNode.dataInt = Integer.parseInt(strToken.nextElement().toString());
-				System.out.println("newNode.dataInt: "+newNode.dataInt);
+				newNode.setDataInt(Integer.parseInt(strToken.nextElement().toString()));
+//				System.out.println("newNode.dataInt: "+newNode.getDataInt());
 				if(false == newTree.insertNode(newNode))
 				{
 					System.out.println("Inserting new node failed");
@@ -144,7 +147,7 @@ class Driver {
 		
 		if(createdTrees.isEmpty())
 		{
-			System.out.println("No trees added to pick");
+			System.out.println("No trees created. Please build a tree first.");
 			return -1;
 		}
 		do
@@ -173,11 +176,24 @@ class Driver {
 		
 		return (intChoice-1);
 	}
+	
 	void visitTree(boolean traverseInorder)
 	{
 		int treeChoice = pickTree("traverse");
 		
-		if((-1 == treeChoice) || (0 < treeChoice) || ((createdTrees.size()-1) < treeChoice))
+		if(-1 == treeChoice)
+		{
+			return;
+		}
+		if((treeChoice < 0) || (createdTrees.size() < treeChoice))
+		{
+			System.out.println("Invalid tree choice");
+			return;
+		}
+		
+		int nodeChoise = createdTrees.get(treeChoice).pickNode(lineReader);
+		
+		if(-1 == nodeChoise)
 		{
 			return;
 		}
@@ -185,12 +201,12 @@ class Driver {
 		if(false == traverseInorder)
 		{
 			System.out.println("Printing tree postorder ...");
-			createdTrees.get(treeChoice).traversePostorder();
+			createdTrees.get(treeChoice).traversePostorder(nodeChoise);
 		}
 		else
 		{
 			System.out.println("Printing tree inorder ...");
-			createdTrees.get(treeChoice).traverseInorder();
+			createdTrees.get(treeChoice).traverseInorder(nodeChoise);
 		}
 	}
 	
@@ -232,7 +248,16 @@ class Driver {
 		
 		try
 		{
-			createdTrees.get(treeChoice).swapChildren();
+			treeClass newTree = new treeClass();
+			if(false == newTree.copyTree(createdTrees.get(treeChoice)))
+			{
+				System.out.println("Error copying tree");
+			}
+			else
+			{	
+				createdTrees.add(newTree);
+				newTree.swapChildren();
+			}
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{
@@ -241,7 +266,12 @@ class Driver {
 		}
 	}
 	
-	boolean treeCompare()
+	boolean deleteNode()
+	{
+		return false;
+	}
+	
+	void treeCompare()
 	{
 		int firstTree = pickTree("compare(1)");
 		int secondTree = pickTree("compare(2)");
@@ -249,19 +279,22 @@ class Driver {
 		if((-1 == firstTree) || (-1 == secondTree) || (firstTree < 0) || (secondTree < 0) ||
 				((createdTrees.size()-1) < firstTree) || ((createdTrees.size()-1) < secondTree))
 		{
-			System.out.println("Invalid trees selected");
-			return false;
+			System.out.println("Invalid tree(s) selected.");
+			return;
 		}
 		System.out.println("Comparing trees ...");
-		return createdTrees.get(firstTree).compareTrees(createdTrees.get(secondTree)); 
+		if(true == createdTrees.get(firstTree).compareTrees(createdTrees.get(secondTree)))
+		{
+			System.out.println("Trees are identical");
+		}
 	}
 }
 
 class treeNode
 {
-	int dataInt;
-	treeNode leftChild;
-	treeNode rightChild;
+	private int dataInt;
+	private treeNode leftChild;
+	private treeNode rightChild;
 	
 	public treeNode() {}
 	
@@ -271,6 +304,31 @@ class treeNode
 		leftChild = tNode.leftChild;
 		rightChild = tNode.rightChild;
 	}
+	public int getDataInt()
+	{
+		return dataInt;
+	}
+	public void setDataInt(int newDataInt)
+	{
+		dataInt = newDataInt;
+	}
+	public treeNode getLeftChild()
+	{
+		return leftChild;
+	}
+	public void setLeftChild(treeNode newLeftChild)
+	{
+		leftChild = newLeftChild;
+	}
+	public treeNode getRightChild()
+	{
+		return rightChild;
+	}
+	public void setRightChild(treeNode newRightChild)
+	{
+		rightChild = newRightChild;
+	}
+	
 	boolean isLeaf()
 	{
 		if((null == leftChild) && (null == rightChild))
@@ -304,33 +362,32 @@ class treeNode
 		{
 			if(null == rightChild)
 			{
-				System.out.println("RightChild added");
+//				System.out.println("RightChild added");
 				rightChild = newNode;
 				return true;
 			}
 			else
 			{
-				System.out.println("Looking at rightChild");
+//				System.out.println("Looking at rightChild");
 				return (rightChild.insertNode(newNode));
 			}
 		}
 		else // (dataInt > newNode.dataInt)
 		{
-			System.out.println("LeftChild added");
 			if(null == leftChild)
 			{
-				System.out.println("LightChild added");
+//				System.out.println("LightChild added");
 				leftChild = new treeNode(newNode);
 				return true;
 			}
 			else
 			{
-				System.out.println("Looking at leftChild");
+//				System.out.println("Looking at leftChild");
 				return (leftChild.insertNode(newNode));
 			}
 		}
 	}
-	boolean findNode(treeNode nodeFind)
+/*	boolean findNode(treeNode nodeFind, int endNode)
 	{
 		if(dataInt == nodeFind.dataInt)
 		{
@@ -358,7 +415,7 @@ class treeNode
 				return rightChild.findNode(nodeFind);
 			}
 		}
-	}
+	}*/
 	boolean deleteNode(treeNode oldNode, treeNode parentNode)
 	{
 		if(dataInt < oldNode.dataInt)
@@ -430,6 +487,18 @@ class treeNode
 		}
 		return outputStr;
 	}
+	treeNode traverseInorder(int endNode)
+	{
+		if(null != leftChild)
+		{
+			return leftChild.traverseInorder((endNode-1));
+		}
+		if(null != rightChild)
+		{
+			return rightChild.traverseInorder((endNode-2));
+		}
+		return this;
+	}
 	String traversePostorder(String outputStr)
 	{
 		if(null != leftChild)
@@ -445,6 +514,18 @@ class treeNode
 		outputStr = outputStr + ((Integer)dataInt).toString() + ", ";
 		
 		return outputStr;
+	}
+	treeNode traversePostorder(int endNode)
+	{
+		if(null != leftChild)
+		{
+			return leftChild.traverseInorder((endNode-1));
+		}
+		if(null != rightChild)
+		{
+			return rightChild.traverseInorder((endNode-2));
+		}
+		return this;
 	}
 	int countLeaf(int leafCount)
 	{
@@ -462,6 +543,34 @@ class treeNode
 			leafCount = rightChild.countLeaf(leafCount);
 		}
 		return leafCount;
+	}
+	int countChildren(int childCount)
+	{
+		if(null != leftChild)
+		{
+			childCount = leftChild.countChildren(childCount);
+		}
+		if(null != rightChild)
+		{
+			childCount = rightChild.countChildren(childCount);
+		}
+		return (childCount+1);
+	}
+	void copyNode(treeNode oldNode)
+	{
+		dataInt = oldNode.dataInt;
+		leftChild = null;
+		rightChild = null;
+		if(null != oldNode.leftChild)
+		{
+			leftChild = new treeNode(oldNode.leftChild);
+			leftChild.copyNode(oldNode.leftChild);
+		}
+		if(null != oldNode.rightChild)
+		{
+			rightChild = new treeNode(oldNode.rightChild);
+			rightChild.copyNode(oldNode.rightChild);
+		}
 	}
 	void swapChild()
 	{
@@ -494,25 +603,27 @@ class treeNode
 	{
 		if(dataInt != compNode.dataInt)
 		{
-			System.out.println("Nodes are not the same");
+			System.out.println("Nodes are not the same "+dataInt+"!="+compNode.dataInt);
 			return false;
 		}
 		if((null != leftChild) && (null != compNode.leftChild))
 		{
 			return leftChild.compareNodes(compNode.leftChild);
 		}
-		else if((null == leftChild) || (null == compNode.leftChild))
+		else if(((null == leftChild) && (null != compNode.leftChild)) ||
+				((null != leftChild) && (null == compNode.leftChild)))
 		{
-			System.out.println("Nodes are not the same");
+			System.out.println("Nodes are not the same (left children differ) for node "+dataInt);
 			return false;
 		}
 		if((null != rightChild) && (null != compNode.rightChild))
 		{
 			return rightChild.compareNodes(compNode.rightChild);
 		}
-		else if((null == rightChild) || (null == compNode.rightChild))
+		else if(((null == rightChild) && (null != compNode.rightChild)) ||
+				((null != rightChild) && (null == compNode.rightChild)))
 		{
-			System.out.println("Nodes are not the same");
+			System.out.println("Nodes are not the same (right children differ) for node "+dataInt);
 			return false;
 		}
 		return true;
@@ -529,7 +640,7 @@ class treeClass
 	{
 		treeRoot = new treeNode(rNode);
 	}
-	treeNode getRoot()
+	treeNode getTreeRoot()
 	{
 		return treeRoot;
 	}
@@ -537,7 +648,7 @@ class treeClass
 	{
 		if(null == treeRoot)
 		{
-			System.out.println("EmptyTree");
+//			System.out.println("EmptyTree");
 			treeRoot = new treeNode(newNode);
 			return true;
 		}
@@ -554,13 +665,13 @@ class treeClass
 		}
 		else
 		{
-			if(treeRoot.dataInt == oldNode.dataInt)
+			if(treeRoot.getDataInt() == oldNode.getDataInt())
 			{
 				treeNode tmpNode = new treeNode();
-				tmpNode.dataInt = 0;
-				tmpNode.leftChild = treeRoot;
+				tmpNode.setDataInt(0);
+				tmpNode.setLeftChild(treeRoot);
 				boolean delResult = treeRoot.deleteNode(oldNode, tmpNode);
-				treeRoot = tmpNode.leftChild;
+				treeRoot = tmpNode.getLeftChild();
 				return delResult;
 			}
 			else
@@ -569,7 +680,7 @@ class treeClass
 			}
 		}
 	}
-	boolean findNode(treeNode nodeFind)
+	/*boolean nodeExist(treeNode nodeFind)
 	{
 		if(null == treeRoot)
 		{
@@ -579,30 +690,35 @@ class treeClass
 		{
 			return treeRoot.findNode(nodeFind);
 		}
-	}
-	void traverseInorder()
+	}*/
+	void traverseInorder(int startNode)
 	{
 		String outputStr = "";
-		if(null == treeRoot)
+		if(startNode > countNodes())
 		{
+			System.out.println("Invalid node for Inorder traversal");
 			return;
 		}
 		else
 		{
-			outputStr = treeRoot.traverseInorder(outputStr);
+			treeNode tNode = treeRoot.traverseInorder(startNode);
+			//treeNode tNode = treeRoot;
+			outputStr = tNode.traverseInorder(outputStr);
 		}
 		System.out.println("Inorder: " + outputStr);
 	}
-	void traversePostorder()
+	void traversePostorder(int startNode)
 	{
 		String outputStr = "";
-		if(null == treeRoot)
+		if(startNode > countNodes())
 		{
+			System.out.println("Invalid node for Postorder traversal");
 			return;
 		}
 		else
 		{
-			outputStr = treeRoot.traversePostorder(outputStr);
+			treeNode tNode = treeRoot.traversePostorder(startNode);
+			outputStr = tNode.traversePostorder(outputStr);
 		}
 		System.out.println("Postorder: " + outputStr);
 	}
@@ -628,6 +744,41 @@ class treeClass
 			}
 		}
 	}
+	int countNodes()
+	{
+		if(null == treeRoot)
+		{
+			return 0;
+		}
+		else
+		{
+			int nodeCount = 0;
+			nodeCount = treeRoot.countChildren(nodeCount);
+			if(0 < nodeCount)
+			{
+				return nodeCount;
+			}
+			else
+			{
+				System.out.println("Error counting nodes");
+				return -1;
+			}
+		}
+	}
+	boolean copyTree(treeClass oldTree)
+	{
+		if(null == oldTree.treeRoot)
+		{
+			System.out.println("EmptyTree");
+			return false;
+		}
+		else
+		{
+			treeRoot = new treeNode(oldTree.treeRoot);
+			treeRoot.copyNode(oldTree.treeRoot);
+			return true;
+		}
+	}
 	void swapChildren()
 	{
 		if(null == treeRoot)
@@ -648,4 +799,46 @@ class treeClass
 		}
 		return treeRoot.compareNodes(treeComp.treeRoot);
 	}
+	int pickNode(Scanner lineReader)
+	{
+		boolean endLoop = false;
+		String choiceStr = "";
+		int intChoice = -1;
+		int maxNodes = countNodes();
+			
+		if(null == treeRoot)
+		{
+			System.out.println("Empty Tree");
+			return -1;
+		}
+		if(-1 == maxNodes)
+		{
+			System.out.println("Error picking node");
+		}
+		do
+		{
+			System.out.println("Which node to display?: (0 for entire tree, 1 to " + maxNodes + ")");
+			choiceStr = lineReader.nextLine();
+			
+			if(false == choiceStr.matches("[+-]?\\d"))
+				{
+					System.out.println("Invalid choice. Please try again.");
+					continue;
+				}
+				
+				intChoice = Integer.parseInt(choiceStr);
+				
+				if((0 <= intChoice) && (intChoice <= maxNodes))
+				{
+					endLoop = true;
+				}
+				else
+				{
+					System.out.println("Invalid choice. Please try again.");
+					continue;
+				}
+			}while(false == endLoop);
+			
+			return (intChoice);
+		}
 }

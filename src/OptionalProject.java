@@ -20,7 +20,7 @@ public class OptionalProject {
 			try
 			{
 				String tmpStr = lineReader.nextLine();
-				if(false == tmpStr.matches("[+-]?\\d"))
+				if(false == tmpStr.matches("\\d"))
 				{
 					System.out.println("Invalid choice. Please try again.");
 					continue;
@@ -230,7 +230,7 @@ class InfixToPostfix {
 
 				if(true == isNumber(c))
 				{
-//					System.out.println("Add to Queue: " + c);
+					System.out.println("Add to Queue: " + c);
 					charQueue.add(c);
 				}
 				else if(true == isOperator(c))
@@ -276,11 +276,11 @@ class InfixToPostfix {
 						operatorStack.pop();
 					}
 				}
-/*				else
+				else
 				{
 					System.out.println("character: " + c);
 				}
-*/
+
 			}
 		
 			while(false == operatorStack.empty())
@@ -310,7 +310,7 @@ class InfixToPostfix {
 	
 	static private boolean isNumber(String c)
 	{
-		return Pattern.compile( "[0-9]*" ).matcher(c).matches();
+		return Pattern.compile( "([0-9]*)(\\.[0-9]*)?" ).matcher(c).matches();
 	}
 
 	static private boolean isOperator(String c)
