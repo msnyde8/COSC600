@@ -27,8 +27,8 @@ class Driver {
 		do
 		{
 			System.out.println("Please enter a command:\n1) Build a tree," +
-					"\n2) Print tree (full or partial) inorder," +
-					"\n3) Print tree (full or partial) postorder," +
+					"\n2) Print full tree or Nth node inorder," +
+					"\n3) Print full tree or Nth node postorder," +
 					"\n4) Count tree leaf nodes," +
 					"\n5) Swap node children (creates new tree)," +
 					"\n6) Delete node," +
@@ -180,6 +180,8 @@ class Driver {
 	void visitTree(boolean traverseInorder)
 	{
 		int treeChoice = pickTree("traverse");
+		int startNode = -1;
+		int endNode = -1;
 		
 		if(-1 == treeChoice)
 		{
@@ -191,22 +193,31 @@ class Driver {
 			return;
 		}
 		
-		int nodeChoise = createdTrees.get(treeChoice).pickNode(lineReader);
-		
-		if(-1 == nodeChoise)
+		startNode = createdTrees.get(treeChoice).pickNode(lineReader);
+		if(startNode < 0)
 		{
 			return;
 		}
+		if(0 == startNode)
+		{
+			startNode = 1;
+			endNode = createdTrees.get(treeChoice).countNodes();
+		}
+		else
+		{
+			endNode = startNode;
+		}
+		System.out.println("startNode=" + startNode + "; endNode=" + endNode);
 
 		if(false == traverseInorder)
 		{
 			System.out.println("Printing tree postorder ...");
-			createdTrees.get(treeChoice).traversePostorder(nodeChoise);
+			createdTrees.get(treeChoice).traverseTree(false, startNode, endNode);
 		}
 		else
 		{
 			System.out.println("Printing tree inorder ...");
-			createdTrees.get(treeChoice).traverseInorder(nodeChoise);
+			createdTrees.get(treeChoice).traverseTree(true, startNode, endNode);
 		}
 	}
 	
@@ -387,35 +398,35 @@ class treeNode
 			}
 		}
 	}
-/*	boolean findNode(treeNode nodeFind, int endNode)
+	treeNode findNode(int findData)
 	{
-		if(dataInt == nodeFind.dataInt)
+		if(dataInt == findData)
 		{
-			return true;
+			return this;
 		}
-		else if(dataInt < nodeFind.dataInt)
+		else if(dataInt < findData)
 		{
 			if(null == leftChild)
 			{
-				return false;
+				return null;
 			}
 			else
 			{
-				return leftChild.findNode(nodeFind);
+				return leftChild.findNode(findData);
 			}
 		}
-		else // (rootNode.dataInt > findNode.dataInt)
+		else // (dataInt > findData)
 		{
 			if(null == rightChild)
 			{
-				return false;
+				return null;
 			}
 			else
 			{
-				return rightChild.findNode(nodeFind);
+				return rightChild.findNode(findData);
 			}
 		}
-	}*/
+	}
 	boolean deleteNode(treeNode oldNode, treeNode parentNode)
 	{
 		if(dataInt < oldNode.dataInt)
@@ -487,18 +498,6 @@ class treeNode
 		}
 		return outputStr;
 	}
-	treeNode traverseInorder(int endNode)
-	{
-		if(null != leftChild)
-		{
-			return leftChild.traverseInorder((endNode-1));
-		}
-		if(null != rightChild)
-		{
-			return rightChild.traverseInorder((endNode-2));
-		}
-		return this;
-	}
 	String traversePostorder(String outputStr)
 	{
 		if(null != leftChild)
@@ -514,18 +513,6 @@ class treeNode
 		outputStr = outputStr + ((Integer)dataInt).toString() + ", ";
 		
 		return outputStr;
-	}
-	treeNode traversePostorder(int endNode)
-	{
-		if(null != leftChild)
-		{
-			return leftChild.traverseInorder((endNode-1));
-		}
-		if(null != rightChild)
-		{
-			return rightChild.traverseInorder((endNode-2));
-		}
-		return this;
 	}
 	int countLeaf(int leafCount)
 	{
@@ -680,18 +667,7 @@ class treeClass
 			}
 		}
 	}
-	/*boolean nodeExist(treeNode nodeFind)
-	{
-		if(null == treeRoot)
-		{
-			return false;
-		}
-		else
-		{
-			return treeRoot.findNode(nodeFind);
-		}
-	}*/
-	void traverseInorder(int startNode)
+	void traverseTree(boolean traverseInorder, int startNode, int endNode)
 	{
 		String outputStr = "";
 		if(startNode > countNodes())
@@ -701,26 +677,43 @@ class treeClass
 		}
 		else
 		{
-			treeNode tNode = treeRoot.traverseInorder(startNode);
-			//treeNode tNode = treeRoot;
-			outputStr = tNode.traverseInorder(outputStr);
+			if(true == traverseInorder)
+			{
+				outputStr = treeRoot.traverseInorder(outputStr);
+			}
+			else
+			{
+				outputStr = treeRoot.traversePostorder(outputStr);
+			}
+			
+			StringTokenizer strTokened = new StringTokenizer(outputStr, ", ");
+			String tmpStr = "";
+			int visitCount = 1;
+//			System.out.println("Number of Tokens: " + strTokened.countTokens());
+			while(true == strTokened.hasMoreElements())
+			{				
+				if((startNode <= visitCount) && (visitCount <= endNode))
+				{
+					tmpStr = tmpStr + strTokened.nextElement();
+					tmpStr = tmpStr + ", ";
+//					System.out.println("visitCount =" + visitCount + "; startNode=" + startNode + "; endNode=" + endNode);
+				}
+				else
+				{
+					strTokened.nextElement();
+				}
+				visitCount++;
+			}
+			outputStr = tmpStr;
 		}
-		System.out.println("Inorder: " + outputStr);
-	}
-	void traversePostorder(int startNode)
-	{
-		String outputStr = "";
-		if(startNode > countNodes())
+		if(true == traverseInorder)
 		{
-			System.out.println("Invalid node for Postorder traversal");
-			return;
+			System.out.println("Inorder: " + outputStr);
 		}
 		else
 		{
-			treeNode tNode = treeRoot.traversePostorder(startNode);
-			outputStr = tNode.traversePostorder(outputStr);
+			System.out.println("Postorder: " + outputStr);
 		}
-		System.out.println("Postorder: " + outputStr);
 	}
 	int countLeaves()
 	{
