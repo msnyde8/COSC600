@@ -9,7 +9,7 @@ import java.util.Queue;
 import java.util.regex.*;
 
 
-public class OptionalProject {
+public class OptionalProject1 {
 	public static void main(String[] args) {
 		boolean end = false;
 		Scanner lineReader = new Scanner(System.in);
@@ -230,7 +230,7 @@ class InfixToPostfix {
 
 				if(true == isNumber(c))
 				{
-					System.out.println("Add to Queue: " + c);
+//					System.out.println("Add to Queue: " + c);
 					charQueue.add(c);
 				}
 				else if(true == isOperator(c))
@@ -278,7 +278,7 @@ class InfixToPostfix {
 				}
 				else
 				{
-					System.out.println("character: " + c);
+//					System.out.println("character: " + c);
 				}
 
 			}
@@ -296,7 +296,7 @@ class InfixToPostfix {
 				charQueue.remove();
 			}
 			
-			System.out.println(postfixStr);
+//			System.out.println(postfixStr);
 		}
 		catch(EmptyStackException|IllegalStateException|ClassCastException|
 				NullPointerException|IllegalArgumentException e)
