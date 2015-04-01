@@ -1,37 +1,29 @@
-package optional_project_1;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.EmptyStackException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.StringTokenizer;
+package optional_project_1_save;
+import java.io.*;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.lang.Math;
 
-public class OptionalProject1_save {
+public class OptionalProject1_save2 {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		try
 		{
-			String inputName = (System.getProperty("user.dir") + System.getProperty("file.separator") + "optionalproject1_input.txt");
+			String inputName = (System.getProperty("user.dir") +
+					System.getProperty("file.separator") +
+					"optionalproject1_input.txt");
 			FileReader fileRead = new FileReader(inputName);
 			BufferedReader inputStream = new BufferedReader(fileRead);
 
 			String charStr = inputStream.readLine();
-			//int characterNum = inputStream.read();
 		
 			Stack<String> operatorStack = new Stack<String>();
 			Queue<String> charQueue = new LinkedList<String>();
-			//Stack<Character> operatorStack = new Stack<Character>();
-			//Queue<Character> charQueue = new LinkedList<Character>();
 		
-			//while(-1 != characterNum)
 			while((null != charStr) && (false == charStr.isEmpty()))
 			{
+				List<String> rtnStr = new LinkedList<String>();
 				System.out.println(charStr);
-				//char c = (char)characterNum;
 				StringTokenizer strToken = new StringTokenizer(charStr,"^*/+-() \t",true);
 				while(strToken.hasMoreTokens())
 				{
@@ -39,7 +31,7 @@ public class OptionalProject1_save {
 
 				if(true == isNumber(c))
 				{
-					System.out.println("Add to Queue: " + c);
+//					System.out.println("Add to Queue: " + c);
 					charQueue.add(c);
 				}
 				else if(true == isOperator(c))
@@ -47,13 +39,13 @@ public class OptionalProject1_save {
 					if((false == operatorStack.empty()) &&
 							(true == isLowerPriority(c, operatorStack.peek())))
 					{
-						System.out.println("Add to Queue: " + operatorStack.peek());
+//						System.out.println("Add to Queue: " + operatorStack.peek());
 						charQueue.add(operatorStack.pop());
 						while(false == operatorStack.empty())
 						{
 							if(true == isLowerPriority(c,operatorStack.peek()))
 							{
-								System.out.println("Add to Queue: " + operatorStack.peek());
+//								System.out.println("Add to Queue: " + operatorStack.peek());
 								charQueue.add(operatorStack.pop());
 							}
 							else
@@ -62,12 +54,12 @@ public class OptionalProject1_save {
 							}
 						}
 					}
-					System.out.println("Add to Stack: " + c);
+//					System.out.println("Add to Stack: " + c);
 					operatorStack.add(c);
 				}
 				else if(true == c.equals("("))
 				{
-					System.out.println("Add to Stack: " + c);
+//					System.out.println("Add to Stack: " + c);
 					operatorStack.add(c);
 				}
 				else if (true == c.equals(")"))
@@ -75,37 +67,35 @@ public class OptionalProject1_save {
 					while((false == operatorStack.empty()) &&
 							(false == operatorStack.peek().equals("(")))
 					{
-						System.out.println("Add to Queue: " + operatorStack.peek());
+//						System.out.println("Add to Queue: " + operatorStack.peek());
 						charQueue.add(operatorStack.pop());
 					}
 					if(false == operatorStack.empty())
 					{
-						System.out.println("Remove from Stack: " + operatorStack.peek());
+//						System.out.println("Remove from Stack: " + operatorStack.peek());
 						operatorStack.pop();
 					}
 				}
-				//characterNum = inputStream.read();
 			}
-			//inputStream.close();
 		
 			while(false == operatorStack.empty())
 			{
-				//System.out.println("Add to Queue: " + operatorStack.peek());
 				charQueue.add(operatorStack.pop());
 			}
 			
 			while(null != charQueue.peek())
 			{
-				System.out.print(charQueue.element());
+				rtnStr.add(charQueue.element());
+				//System.out.print(charQueue.element());
 				charQueue.remove();
 			}
-			System.out.println();
+			printAnswer(rtnStr);
 			charStr = inputStream.readLine();
 			}
 			inputStream.close();
 		}
-		catch(IOException|EmptyStackException|
-				IllegalStateException|ClassCastException|NullPointerException|
+		catch(IOException|EmptyStackException|IllegalStateException|
+				ClassCastException|NullPointerException|
 				IllegalArgumentException e)
 		{
 	    	System.out.println("Caught Exception: " + e.getMessage());
@@ -115,8 +105,6 @@ public class OptionalProject1_save {
 	
 	static private boolean isNumber(String c)
 	{
-		/*return ((c == '1') || (c == '2') || (c == '3') || (c == '4') || (c == '5') ||
-				(c == '6') || (c == '7') || (c == '8') || (c == '9') || (c == '0'));*/
 		return Pattern.compile( "[0-9]*" ).matcher(c).matches();
 	}
 
@@ -148,8 +136,7 @@ public class OptionalProject1_save {
 	
 	static private boolean isLowerPriority(String firstStr, String secondStr)
 	{
-		System.out.println(firstStr);
-		System.out.println(secondStr);
+
 		int firstPriority = charPriority(firstStr);
 		int secondPriority = charPriority(secondStr);
 
@@ -167,51 +154,67 @@ public class OptionalProject1_save {
 		}
 	}
 	
-/*	static private boolean isNumber(char c)
+	static private void printAnswer(List<String> postfix)
 	{
-		return ((c == '1') || (c == '2') || (c == '3') || (c == '4') || (c == '5') ||
-				(c == '6') || (c == '7') || (c == '8') || (c == '9') || (c == '0'));
-	}
-	
-	static private boolean isOperator(char c)
-	{
-		return ((c == '+') || (c == '-') || (c == '*') ||
-				(c == '/') || (c == '^'));
-	}
-	
-	static private int charPriority(char priorChar)
-	{
-		switch(priorChar)
-		{
-			case '^':
-				return 3;
-			case '*':
-			case '/':
-				return 2;
-			case '+':
-			case '-':
-				return 1;
-			default:
-				return 0;
-		}
-	}
-	
-	static private boolean isLowerPriority(char firstC, char secondC)
-	{
-		int firstPriority = charPriority(firstC);
-		int secondPriority = charPriority(secondC);
+		Double printAnswer = 0.0;
+		Stack<String> printStack = new Stack<String>();
 
-		if(firstC == '(')
+		Iterator<String> listIter = postfix.iterator();
+		while(listIter.hasNext())
 		{
-			return true;
+			System.out.print(listIter.next());
 		}
-		else if(firstPriority <= secondPriority)
+		System.out.println();
+		
+		listIter = postfix.iterator();
+		while(listIter.hasNext())
 		{
-			return true;
+			String valStr = listIter.next();
+			if(true == isNumber(valStr))
+			{
+				printStack.push(valStr);
+			}
+			else
+			{
+				if(printStack.empty())
+				{
+					System.out.println("Statement malformed");
+					return;
+				}
+				Double secInt = Double.parseDouble(printStack.pop());
+				if(printStack.empty())
+				{
+					System.out.println("Statement malformed");
+					return;
+				}
+				Double firstInt = Double.parseDouble(printStack.pop());
+				switch(valStr)
+				{
+					case "+":
+						printAnswer = firstInt + secInt;
+						break;
+					case "-":
+					case "–":
+						printAnswer = firstInt - secInt;
+						break;
+					case "*":
+					case "x":
+						printAnswer = firstInt * secInt;
+						break;
+					case "/":
+						printAnswer = firstInt / secInt;
+						break;
+					case "^":
+						printAnswer = Math.pow(firstInt, secInt);
+						break;
+					default:
+						System.out.println("Statement malformed");
+						return;
+				}
+//				System.out.println(printAnswer);
+				printStack.add(printAnswer.toString());
+			}
 		}
-		else
-		{
-			return false;
-		}
-	}*/
+		System.out.println(printStack.pop());
+	}
 }
