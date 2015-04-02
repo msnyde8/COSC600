@@ -27,11 +27,11 @@ class Driver {
 		do
 		{
 			System.out.println("Please enter a command:\n1) Build a tree," +
-					"\n2) Print full tree or Nth node inorder," +
-					"\n3) Print full tree or Nth node postorder," +
+					"\n2) Print tree Inorder (full tree or Nth node)," +
+					"\n3) Print tree Postorder (full tree or Nth node)," +
 					"\n4) Count tree leaf nodes," +
 					"\n5) Swap node children (creates new tree)," +
-					"\n6) Delete node," +
+					"\n6) Delete tree node (by value)," +
 					"\n7) Compare two trees," +
 					"\n0) Exit");
 		
@@ -130,6 +130,7 @@ class Driver {
 			}
 			
 			createdTrees.addElement(newTree);
+			System.out.println("Tree T" + createdTrees.size() + " complete.");
 		}
 		catch(NullPointerException e)
 		{
@@ -268,6 +269,7 @@ class Driver {
 			{	
 				createdTrees.add(newTree);
 				newTree.swapChildren();
+				System.out.println("Children from tree T" + (treeChoice+1) + " swapped into new tree T" + createdTrees.size());
 			}
 		}
 		catch(ArrayIndexOutOfBoundsException e)
@@ -277,12 +279,12 @@ class Driver {
 		}
 	}
 	
-	boolean deleteNode()
+	void deleteNode()
 	{
 		int treeChoice = pickTree("delete a node");
 		if((treeChoice < 0) || ((createdTrees.size()-1 < treeChoice)))
 		{
-			return false;
+			return;
 		}
 		
 		int nodeChoice = -1;
@@ -310,15 +312,21 @@ class Driver {
 		
 		try
 		{
-			createdTrees.get(treeChoice).deleteNode(nodeChoice);
+			if(false == createdTrees.get(treeChoice).deleteNode(nodeChoice))
+			{
+				System.out.println("Deleting node " + nodeChoice + " failed");
+			}
+			else
+			{
+				System.out.println("Tree T" + (treeChoice+1) + " node " + nodeChoice + " deleted");
+			}
+			
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("Caught Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
-		return false;
 	}
 	
 	void treeCompare()
@@ -468,7 +476,7 @@ class treeNode
 	}
 	boolean deleteNode(int nodeData, treeNode parentNode)
 	{
-		if(dataInt < dataInt)
+		if(nodeData < dataInt)
 		{
 			if(null == leftChild)
 			{
@@ -479,7 +487,7 @@ class treeNode
 				return leftChild.deleteNode(nodeData, this);
 			}	
 		}
-		else if(dataInt > nodeData)
+		else if(dataInt < nodeData)
 		{
 			if(null == rightChild)
 			{
@@ -495,7 +503,7 @@ class treeNode
 			if((null != leftChild) && (null != rightChild))
 			{
 				dataInt = rightChild.minValue();
-				rightChild.deleteNode(nodeData,this);
+				return rightChild.deleteNode(dataInt,this);
 			}
 			else if(parentNode.leftChild == this)
 			{
@@ -734,7 +742,10 @@ class treeClass
 				if((startNode <= visitCount) && (visitCount <= endNode))
 				{
 					tmpStr = tmpStr + strTokened.nextElement();
-					tmpStr = tmpStr + ", ";
+					if(visitCount != endNode)
+					{
+						tmpStr = tmpStr + ", ";
+					}
 //					System.out.println("visitCount =" + visitCount + "; startNode=" + startNode + "; endNode=" + endNode);
 				}
 				else
