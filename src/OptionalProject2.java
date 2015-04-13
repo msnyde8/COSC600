@@ -20,7 +20,7 @@ public class OptionalProject2 {
 		{
 
 			String genName = pathName + "optionalproject2_input.txt";
-
+/*
 			PrintWriter writer = new PrintWriter(genName);
 			Random randomGenerator = new Random();
 			for (int i = 0; i < 20000; ++i)
@@ -31,11 +31,11 @@ public class OptionalProject2 {
 	        	writer.flush();
 	    	}
 			writer.close();
-
+*/
 			SortClass sortObj = new SortClass(genName);
 			sortObj.sort();
 		}
-		catch(FileNotFoundException|IllegalArgumentException e)
+		catch(/*FileNotFoundException|*/IllegalArgumentException e)
 		{
 			System.out.println("Caught Exception: " + e.getMessage());
         	e.printStackTrace();
@@ -95,7 +95,7 @@ class SortClass {
 			// Quick Sort
 			int quickArray[] = new int [numElements];
 			System.arraycopy(numArray, 0, quickArray, 0, numArray.length);
-			QuickSort(quickArray);
+//			QuickSort(quickArray);
 			
 			//Merge Sort
 			int mergeArray[] = new int [numElements];
@@ -107,6 +107,10 @@ class SortClass {
 			System.arraycopy(numArray, 0, heapArray, 0, numArray.length);
 //			HeapSort(heapArray);
 
+			InsertionSort(insertArray);
+			QuickSort(quickArray);
+			MergeSort(mergeArray);
+			HeapSort(heapArray);
 			outputWriter.close();
 		}
 	    catch(IOException|NumberFormatException|NullPointerException|NoSuchElementException e)
@@ -181,14 +185,14 @@ class SortClass {
 	void QuickSort(int qArray[])
 	{
 		classType = "Quick Sort";
-		printArray(qArray);
+//		printArray(qArray);
 //		System.out.println("Array size: " + qArray.length);
-		long startTime1 = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		qSort(qArray, 0, (qArray.length - 1));
-		long endTime1 = System.currentTimeMillis();
-		printArray(qArray);
-		System.out.println(startTime1);
-		System.out.println(endTime1);
+		endTime = System.currentTimeMillis();
+//		printArray(qArray);
+//		System.out.println(startTime);
+//		System.out.println(endTime);
 		printTime();
 	}
 	void qSort(int qSortArray[], int startIndex, int endIndex)
@@ -202,6 +206,7 @@ class SortClass {
 		}
 		
 		int pivotInt = qSortArray[startIndex];
+//		System.out.println("pivotInt: " + pivotInt);
 
 		while(newStart < newEnd)
 		{
