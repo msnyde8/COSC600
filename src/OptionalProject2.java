@@ -20,10 +20,11 @@ public class OptionalProject2 {
 		{
 
 			String genName = pathName + "optionalproject2_input.txt";
-/*
+			int numElements = 20000;
+
 			PrintWriter writer = new PrintWriter(genName);
 			Random randomGenerator = new Random();
-			for (int i = 0; i < 20000; ++i)
+			for (int i = 0; i < numElements; ++i)
 			{
 				int randomInt = randomGenerator.nextInt();
 //	        	System.out.println(randomInt);
@@ -31,11 +32,11 @@ public class OptionalProject2 {
 	        	writer.flush();
 	    	}
 			writer.close();
-*/
-			SortClass sortObj = new SortClass(genName);
+
+			SortClass sortObj = new SortClass(genName, numElements);
 			sortObj.sort();
 		}
-		catch(/*FileNotFoundException|*/IllegalArgumentException e)
+		catch(FileNotFoundException|IllegalArgumentException e)
 		{
 			System.out.println("Caught Exception: " + e.getMessage());
         	e.printStackTrace();
@@ -53,13 +54,14 @@ class SortClass {
 	private PrintWriter outputWriter;
 	
 	private int numElements = 20000;
-	private int heapSize;
+	private int heapSize = -1;
 	private long startTime = 0;
 	private long endTime = 0;
 	private String classType = "";
 
-	SortClass(String inName)
+	SortClass(String inName, int numElem)
 	{
+		numElements = numElem;
 		if(false == inName.isEmpty())
 		{
 			inputName = inName;
@@ -235,44 +237,57 @@ class SortClass {
 		classType = "Merge Sort";
 //		printArray(mArray);
 		startTime = System.currentTimeMillis();
-		mSort(mArray, 0, (mArray.length-1));
+		int mTmpArray[] = new int[mArray.length];
+		mSort(mArray, mTmpArray, 0, (mArray.length-1));
 		endTime = System.currentTimeMillis();
 //		printArray(mArray);
 		printTime();
 	}
-	void mSort(int mSortArray[], int startIndex, int endIndex)
+	void mSort(int mSortArray[], int mTmpSort[], int startIndex, int endIndex)
 	{
+		if(startIndex >= endIndex)
+		{
+			return;
+		}
+		
+		int leftEnd = ((startIndex + endIndex) / 2);
+				
+		mSort(mSortArray, mTmpSort, startIndex, leftEnd);
+		mSort(mSortArray, mTmpSort, (leftEnd+1), endIndex);
+			
+		mMerge(mSortArray, mTmpSort, startIndex, leftEnd, endIndex);
+	}
+	void mMerge(int mMergeArray[], int mTmpMerge[], int mLeft, int mMiddle, int mRight)
+	{
+		int rightStart = (mMiddle + 1);
+		int tmpIndex = mLeft;
 		try
 		{
-			if(startIndex >= endIndex)
+			while((mLeft <= mMiddle) && (rightStart <= mRight))
 			{
-				return;
-			}
-			
-			int leftEnd = ((startIndex + endIndex) / 2);
-			int rightStart = (leftEnd + 1);
-				
-			mSort(mSortArray, startIndex, leftEnd);
-			mSort(mSortArray, rightStart, endIndex);
-				
-			while((startIndex <= leftEnd) && (rightStart <= endIndex))
-			{
-				if(mSortArray[startIndex] < mSortArray[rightStart])
+				if(mMergeArray[mLeft] <= mMergeArray[rightStart])
 				{
-					++startIndex;
+					mTmpMerge[tmpIndex++] = mMergeArray[mLeft++];
 				}
 				else
 				{
-					int tempNum = mSortArray[rightStart];
-					for(int k = rightStart-1; k >= startIndex; --k)
-					{
-						mSortArray[k+1] = mSortArray[k];
-					}
-					mSortArray[startIndex] = tempNum;
-					++startIndex;
-					++leftEnd;
-					++rightStart;
+					mTmpMerge[tmpIndex++] = mMergeArray[rightStart++];
 				}
+			}
+		
+			while(mLeft <= mMiddle)
+			{
+				mTmpMerge[tmpIndex++] = mMergeArray[mLeft++];
+			}
+			
+			while(rightStart <= mRight)
+			{
+				mTmpMerge[tmpIndex++] = mMergeArray[rightStart++];
+			}
+			
+			for(int i = 0; i < (mRight - mLeft + 1); --mRight)
+			{
+				mMergeArray[mRight] = mTmpMerge[mRight];
 			}
 		}
 	    catch(ArrayIndexOutOfBoundsException e)
