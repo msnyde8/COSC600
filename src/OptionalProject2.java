@@ -21,7 +21,7 @@ public class OptionalProject2 {
 
 			String genName = pathName + "optionalproject2_input.txt";
 			int numElements = 20000;
-
+/*
 			PrintWriter writer = new PrintWriter(genName);
 			Random randomGenerator = new Random();
 			for (int i = 0; i < numElements; ++i)
@@ -32,11 +32,11 @@ public class OptionalProject2 {
 	        	writer.flush();
 	    	}
 			writer.close();
-
+*/
 			SortClass sortObj = new SortClass(genName, numElements);
 			sortObj.sort();
 		}
-		catch(FileNotFoundException|IllegalArgumentException e)
+		catch(/*FileNotFoundException|*/IllegalArgumentException e)
 		{
 			System.out.println("Caught Exception: " + e.getMessage());
         	e.printStackTrace();
@@ -92,27 +92,23 @@ class SortClass {
 			// Insertion Sort
 			int insertArray[] = new int [numElements];
 			System.arraycopy(numArray, 0, insertArray, 0, numArray.length);
-//			InsertionSort(insertArray);
+			InsertionSort(insertArray);
 	
 			// Quick Sort
 			int quickArray[] = new int [numElements];
 			System.arraycopy(numArray, 0, quickArray, 0, numArray.length);
-//			QuickSort(quickArray);
+			QuickSort(quickArray);
 			
 			//Merge Sort
 			int mergeArray[] = new int [numElements];
 			System.arraycopy(numArray, 0, mergeArray, 0, numArray.length);
-//			MergeSort(mergeArray);
+			MergeSort(mergeArray);
 			
 			//Heap Sort
 			int heapArray[] = new int [numElements];
 			System.arraycopy(numArray, 0, heapArray, 0, numArray.length);
-//			HeapSort(heapArray);
-
-			InsertionSort(insertArray);
-			QuickSort(quickArray);
-			MergeSort(mergeArray);
 			HeapSort(heapArray);
+
 			outputWriter.close();
 		}
 	    catch(IOException|NumberFormatException|NullPointerException|NoSuchElementException e)
@@ -207,29 +203,44 @@ class SortClass {
 			return;
 		}
 		
-		int pivotInt = qSortArray[startIndex];
-//		System.out.println("pivotInt: " + pivotInt);
+		int pivotInt = qSortArray[(startIndex + ((endIndex-startIndex)/2))];
 
-		while(newStart < newEnd)
+//		System.out.println("pivotInt: " + pivotInt);
+		try
 		{
-			while((newStart <= endIndex) && (newStart < newEnd) && (qSortArray[newStart] <= pivotInt))
+			while(newStart <= newEnd)
 			{
-				++newStart;
+
+				while(qSortArray[newStart] < pivotInt)
+				{
+					newStart++;
+				}
+				while(qSortArray[newEnd] > pivotInt)
+				{
+					newEnd--;
+				}
+				if(newStart <= newEnd)
+				{
+					aSwap(qSortArray, newStart, newEnd);
+					newStart++;
+					newEnd--;
+				}
 			}
-			while( (qSortArray[newEnd] > pivotInt) && (startIndex <= newEnd) && (newStart <= newEnd))
+			
+			if(startIndex < newEnd)
 			{
-				--newEnd;
+				qSort(qSortArray, startIndex, newEnd);
 			}
-			if(newStart < newEnd)
+			if(newStart < endIndex)
 			{
-				aSwap(qSortArray, newStart, newEnd);
+				qSort(qSortArray, newStart, endIndex);
 			}
 		}
-		
-		aSwap(qSortArray, startIndex, newEnd);
-		
-		qSort(qSortArray, startIndex, (newEnd - 1));
-		qSort(qSortArray, newEnd+1, endIndex);
+	    catch(ArrayIndexOutOfBoundsException e)
+	    {
+	    	System.out.println("Caught Exception: " + e.getMessage());
+	    	e.printStackTrace();
+	    }
 	}
 	
 	void MergeSort(int mArray[])
@@ -327,7 +338,7 @@ class SortClass {
 		int rightIndex = (leftIndex + 1);
 		int greatestIndex = hIndex;
 		
-		if ((leftIndex <= heapSize) && (aHeap[leftIndex] > aHeap[greatestIndex]))
+		if ((leftIndex <= heapSize) && (aHeap[leftIndex] > aHeap[hIndex]))
 		{
 			greatestIndex = leftIndex;
 		}
