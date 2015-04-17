@@ -1,3 +1,4 @@
+package optional_project_2;
 
 
 import java.io.BufferedReader;
@@ -21,7 +22,7 @@ public class OptionalProject2 {
 
 			String genName = pathName + "optionalproject2_input.txt";
 			int numElements = 20000;
-/*
+
 			PrintWriter writer = new PrintWriter(genName);
 			Random randomGenerator = new Random();
 			for (int i = 0; i < numElements; ++i)
@@ -32,11 +33,11 @@ public class OptionalProject2 {
 	        	writer.flush();
 	    	}
 			writer.close();
-*/
+
 			SortClass sortObj = new SortClass(genName, numElements);
 			sortObj.sort();
 		}
-		catch(/*FileNotFoundException|*/IllegalArgumentException e)
+		catch(FileNotFoundException|IllegalArgumentException e)
 		{
 			System.out.println("Caught Exception: " + e.getMessage());
         	e.printStackTrace();

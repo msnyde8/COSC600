@@ -1,4 +1,4 @@
-Insertion Sort complete in 153 milliseconds
-Quick Sort complete in 16 milliseconds
-Merge Sort complete in 0 milliseconds
+Insertion Sort complete in 172 milliseconds
+Quick Sort complete in 0 milliseconds
+Merge Sort complete in 16 milliseconds
 Heap Sort complete in 0 milliseconds

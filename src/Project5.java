@@ -1,8 +1,10 @@
 
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.regex.PatternSyntaxException;
 
 public class Project5 {
 
@@ -50,55 +52,55 @@ class Driver {
 				{
 					System.out.println("Invalid choice. Please try again.");
 					continue;
-				}
-				
-				switch(cmdChoice)
-				{
-					case 1:
-						buildTree();
-						break;
-					case 2:
-						visitTree(true);
-						break;
-					case 3:
-						visitTree(false);
-						break;
-					case 4:
-						leafCount();
-						break;
-					case 5:
-						childSwap();
-						break;
-					case 6:
-						deleteNode();
-						break;
-					case 7:
-						treeCompare();
-						break;
-					case 0:
-						System.out.println("Thank you and have a nice day!");
-						endCmd = true;
-						break;
-/*					case 8:
-						treeNode tmpNode = new treeNode();
-						tmpNode.dataInt = 25;
-						if(true == createdTrees.get(0).findNode(createdTrees.get(0).getRoot(), tmpNode))
-						{
-							System.out.println("Found node!");
-						}
-						else
-						{
-							System.out.println("Node not found");
-						}
-*/
-					default:
-						break;
-				}
+				}	
 			}
 			catch(IllegalStateException|NumberFormatException e)
 			{
 				System.out.println("Caught Exception: " + e.getMessage());
 				e.printStackTrace();
+			}
+			
+			switch(cmdChoice)
+			{
+				case 1:
+					buildTree();
+					break;
+				case 2:
+					visitTree(true);
+					break;
+				case 3:
+					visitTree(false);
+					break;
+				case 4:
+					leafCount();
+					break;
+				case 5:
+					childSwap();
+					break;
+				case 6:
+					deleteNode();
+					break;
+				case 7:
+					treeCompare();
+					break;
+				case 0:
+					System.out.println("Thank you and have a nice day!");
+					endCmd = true;
+					break;
+/*				case 8:
+					treeNode tmpNode = new treeNode();
+					tmpNode.dataInt = 25;
+					if(true == createdTrees.get(0).findNode(createdTrees.get(0).getRoot(), tmpNode))
+					{
+							System.out.println("Found node!");
+					}
+					else
+					{
+						System.out.println("Node not found");
+					}
+*/
+				default:
+					break;
 			}
 		}while(false == endCmd);
 	}
@@ -125,14 +127,14 @@ class Driver {
 //				System.out.println("newNode.dataInt: "+newNode.getDataInt());
 				if(false == newTree.insertNode(newNode))
 				{
-					System.out.println("Inserting new node failed");
+					System.out.println("Inserting new node " + newNode.getDataInt() + " failed");
 				}
 			}
 			
 			createdTrees.addElement(newTree);
 			System.out.println("Tree T" + createdTrees.size() + " complete.");
 		}
-		catch(NullPointerException e)
+		catch(NullPointerException|NumberFormatException e)
 		{
 			System.out.println("Caught Exception: " + e.getMessage());
 			e.printStackTrace();
@@ -151,27 +153,36 @@ class Driver {
 			System.out.println("No trees created. Please build a tree first.");
 			return -1;
 		}
+
 		do
 		{
-			System.out.println("Which tree to " + actionStr + "?: (1 to " + createdTrees.size() + ")");
-			choiceStr = lineReader.nextLine();
-			
-			if(false == choiceStr.matches("[+-]?\\d"))
+			try
 			{
-				System.out.println("Invalid choice. Please try again.");
-				continue;
+				System.out.println("Which tree to " + actionStr + "?: (1 to " + createdTrees.size() + ")");
+				choiceStr = lineReader.nextLine();
+				
+				if(false == choiceStr.matches("[+-]?\\d"))
+				{
+					System.out.println("Invalid choice. Please try again.");
+					continue;
+				}
+				
+				intChoice = Integer.parseInt(choiceStr);
+				
+				if((0 < intChoice) && (intChoice <= createdTrees.size()))
+				{
+					endLoop = true;
+				}
+				else
+				{
+					System.out.println("Invalid choice. Please try again.");
+					continue;
+				}
 			}
-			
-			intChoice = Integer.parseInt(choiceStr);
-			
-			if((0 < intChoice) && (intChoice <= createdTrees.size()))
+			catch(NoSuchElementException|IllegalStateException|PatternSyntaxException|NumberFormatException e)
 			{
-				endLoop = true;
-			}
-			else
-			{
-				System.out.println("Invalid choice. Please try again.");
-				continue;
+				System.out.println("Caught Exception: " + e.getMessage());
+				e.printStackTrace();
 			}
 		}while(false == endLoop);
 		
@@ -180,45 +191,53 @@ class Driver {
 	
 	void visitTree(boolean traverseInorder)
 	{
-		int treeChoice = pickTree("traverse");
-		int startNode = -1;
-		int endNode = -1;
-		
-		if(-1 == treeChoice)
+		try
 		{
-			return;
+			int treeChoice = pickTree("traverse");
+			int startNode = -1;
+			int endNode = -1;
+			
+			if(-1 == treeChoice)
+			{
+				return;
+			}
+			if((treeChoice < 0) || (createdTrees.size() < treeChoice))
+			{
+				System.out.println("Invalid tree choice");
+				return;
+			}
+			
+			startNode = createdTrees.get(treeChoice).pickNode(lineReader);
+			if(startNode < 0)
+			{
+				return;
+			}
+			if(0 == startNode)
+			{
+				startNode = 1;
+				endNode = createdTrees.get(treeChoice).countNodes();
+			}
+			else
+			{
+				endNode = startNode;
+			}
+	//		System.out.println("startNode=" + startNode + "; endNode=" + endNode);
+	
+			if(false == traverseInorder)
+			{
+				System.out.println("Printing tree postorder ...");
+				createdTrees.get(treeChoice).traverseTree(false, startNode, endNode);
+			}
+			else
+			{
+				System.out.println("Printing tree inorder ...");
+				createdTrees.get(treeChoice).traverseTree(true, startNode, endNode);
+			}
 		}
-		if((treeChoice < 0) || (createdTrees.size() < treeChoice))
+		catch(ArrayIndexOutOfBoundsException e)
 		{
-			System.out.println("Invalid tree choice");
-			return;
-		}
-		
-		startNode = createdTrees.get(treeChoice).pickNode(lineReader);
-		if(startNode < 0)
-		{
-			return;
-		}
-		if(0 == startNode)
-		{
-			startNode = 1;
-			endNode = createdTrees.get(treeChoice).countNodes();
-		}
-		else
-		{
-			endNode = startNode;
-		}
-		System.out.println("startNode=" + startNode + "; endNode=" + endNode);
-
-		if(false == traverseInorder)
-		{
-			System.out.println("Printing tree postorder ...");
-			createdTrees.get(treeChoice).traverseTree(false, startNode, endNode);
-		}
-		else
-		{
-			System.out.println("Printing tree inorder ...");
-			createdTrees.get(treeChoice).traverseTree(true, startNode, endNode);
+			System.out.println("Caught Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
@@ -292,26 +311,34 @@ class Driver {
 		boolean endLoop = false;
 		do
 		{
-			System.out.println("Which node (value) to delete?: ");
-			choiceStr = lineReader.nextLine();
-		
-			if(false == choiceStr.matches("\\d[\\d]*"))
+			try
 			{
-				System.out.println("Invalid choice. Please try again.");
-				continue;
+				System.out.println("Which node (value) to delete?: ");
+				choiceStr = lineReader.nextLine();
+			
+				if(false == choiceStr.matches("\\d[\\d]*"))
+				{
+					System.out.println("Invalid choice. Please try again.");
+					continue;
+				}
+				else
+				{
+					endLoop = true;
+				}
 			}
-			else
+			catch(NoSuchElementException|IllegalStateException|PatternSyntaxException e)
 			{
-				endLoop = true;
+				System.out.println("Caught Exception: " + e.getMessage());
+				e.printStackTrace();
 			}
 		}while(false == endLoop);
-		
-		nodeChoice = Integer.parseInt(choiceStr);
-		
-		System.out.println("Deleting node " + nodeChoice + " ...");
-		
+
 		try
 		{
+			nodeChoice = Integer.parseInt(choiceStr);
+		
+			System.out.println("Deleting node " + nodeChoice + " ...");
+
 			if(false == createdTrees.get(treeChoice).deleteNode(nodeChoice))
 			{
 				System.out.println("Deleting node " + nodeChoice + " failed");
@@ -322,7 +349,7 @@ class Driver {
 			}
 			
 		}
-		catch(ArrayIndexOutOfBoundsException e)
+		catch(NumberFormatException|ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("Caught Exception: " + e.getMessage());
 			e.printStackTrace();
@@ -341,9 +368,17 @@ class Driver {
 			return;
 		}
 		System.out.println("Comparing trees ...");
-		if(true == createdTrees.get(firstTree).compareTrees(createdTrees.get(secondTree)))
+		try
 		{
-			System.out.println("Trees are identical");
+			if(true == createdTrees.get(firstTree).compareTrees(createdTrees.get(secondTree)))
+			{
+				System.out.println("Trees are identical");
+			}
+		}
+		catch(ArrayIndexOutOfBoundsException e)
+		{
+			System.out.println("Caught Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }
@@ -378,14 +413,14 @@ class treeNode
 	{
 		leftChild = newLeftChild;
 	}
-	public treeNode getRightChild()
+	/*public treeNode getRightChild()
 	{
 		return rightChild;
 	}
 	public void setRightChild(treeNode newRightChild)
 	{
 		rightChild = newRightChild;
-	}
+	}*/
 	
 	boolean isLeaf()
 	{
@@ -413,7 +448,7 @@ class treeNode
 	{
 		if(dataInt == newNode.dataInt)
 		{
-			System.out.println("Node already exists");
+			System.out.println("Node value " + newNode.dataInt + " already exists");
 			return false;
 		}
 		else if(dataInt < newNode.dataInt)
@@ -674,10 +709,6 @@ class treeClass
 	{
 		treeRoot = new treeNode(rNode);
 	}
-	treeNode getTreeRoot()
-	{
-		return treeRoot;
-	}
 	boolean insertNode(treeNode newNode)
 	{
 		if(null == treeRoot)
@@ -733,28 +764,36 @@ class treeClass
 				outputStr = treeRoot.traversePostorder(outputStr);
 			}
 			
-			StringTokenizer strTokened = new StringTokenizer(outputStr, ", ");
-			String tmpStr = "";
-			int visitCount = 1;
-//			System.out.println("Number of Tokens: " + strTokened.countTokens());
-			while(true == strTokened.hasMoreElements())
-			{				
-				if((startNode <= visitCount) && (visitCount <= endNode))
-				{
-					tmpStr = tmpStr + strTokened.nextElement();
-					if(visitCount != endNode)
+			try
+			{
+				StringTokenizer strTokened = new StringTokenizer(outputStr, ", ");
+				String tmpStr = "";
+				int visitCount = 1;
+//				System.out.println("Number of Tokens: " + strTokened.countTokens());
+				while(true == strTokened.hasMoreElements())
+				{				
+					if((startNode <= visitCount) && (visitCount <= endNode))
 					{
-						tmpStr = tmpStr + ", ";
+						tmpStr = tmpStr + strTokened.nextElement();
+						if(visitCount != endNode)
+						{
+							tmpStr = tmpStr + ", ";
+						}
+//						System.out.println("visitCount =" + visitCount + "; startNode=" + startNode + "; endNode=" + endNode);
 					}
-//					System.out.println("visitCount =" + visitCount + "; startNode=" + startNode + "; endNode=" + endNode);
+					else
+					{
+						strTokened.nextElement();
+					}
+					visitCount++;
 				}
-				else
-				{
-					strTokened.nextElement();
-				}
-				visitCount++;
+				outputStr = tmpStr;
 			}
-			outputStr = tmpStr;
+			catch(NullPointerException|NoSuchElementException e)
+			{
+				System.out.println("Caught Exception: " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		if(true == traverseInorder)
 		{
@@ -860,28 +899,36 @@ class treeClass
 		}
 		do
 		{
-			System.out.println("Which node to display?: (0 for entire tree, 1 to " + maxNodes + ")");
-			choiceStr = lineReader.nextLine();
+			try
+			{
+				System.out.println("Which node to display?: (0 for entire tree, 1 to " + maxNodes + ")");
+				choiceStr = lineReader.nextLine();
 			
-			if(false == choiceStr.matches("[+-]?\\d"))
-				{
-					System.out.println("Invalid choice. Please try again.");
-					continue;
-				}
-				
-				intChoice = Integer.parseInt(choiceStr);
-				
-				if((0 <= intChoice) && (intChoice <= maxNodes))
-				{
-					endLoop = true;
-				}
-				else
-				{
-					System.out.println("Invalid choice. Please try again.");
-					continue;
-				}
-			}while(false == endLoop);
+				if(false == choiceStr.matches("[+-]?\\d"))
+					{
+						System.out.println("Invalid choice. Please try again.");
+						continue;
+					}
+					
+					intChoice = Integer.parseInt(choiceStr);
+					
+					if((0 <= intChoice) && (intChoice <= maxNodes))
+					{
+						endLoop = true;
+					}
+					else
+					{
+						System.out.println("Invalid choice. Please try again.");
+						continue;
+					}
+			}
+			catch(NoSuchElementException|IllegalStateException|PatternSyntaxException|NumberFormatException e)
+			{
+				System.out.println("Caught Exception: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}while(false == endLoop);
 			
-			return (intChoice);
-		}
+		return (intChoice);
+	}
 }

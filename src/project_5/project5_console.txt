@@ -1,0 +1,177 @@
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+1
+Please enter integers for tree T1:
+60 20 100 35 15 200 75 150 6 17 40
+Tree T1 complete.
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+2
+Which tree to traverse?: (1 to 1)
+1
+Which node to display?: (0 for entire tree, 1 to 11)
+0
+Printing tree inorder ...
+Inorder: 6, 15, 17, 20, 35, 40, 60, 75, 100, 150, 200
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+4
+Which tree to count leaves?: (1 to 1)
+1
+Counting tree leaf nodes ...
+Number of leaves: 5
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+5
+Which tree to swap children?: (1 to 1)
+1
+Swapping children ...
+Children from tree T1 swapped into new tree T2
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+3
+Which tree to traverse?: (1 to 2)
+2
+Which node to display?: (0 for entire tree, 1 to 11)
+0
+Printing tree postorder ...
+Postorder: 150, 200, 75, 100, 40, 35, 17, 6, 15, 20, 60
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+7
+Which tree to compare(1)?: (1 to 2)
+1
+Which tree to compare(2)?: (1 to 2)
+2
+Comparing trees ...
+Nodes are not the same 20!=100
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+1
+Please enter integers for tree T3:
+60 100 20 15 35 75 200 6 17 40 150
+Tree T3 complete.
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+7
+Which tree to compare(1)?: (1 to 3)
+1
+Which tree to compare(2)?: (1 to 3)
+3
+Comparing trees ...
+Trees are identical
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+6
+Which tree to delete a node?: (1 to 3)
+3
+Which node (value) to delete?: 
+15
+Deleting node 15 ...
+Tree T3 node 15 deleted
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+2
+Which tree to traverse?: (1 to 3)
+3
+Which node to display?: (0 for entire tree, 1 to 10)
+0
+Printing tree inorder ...
+Inorder: 6, 17, 20, 35, 40, 60, 75, 100, 150, 200
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+2
+Which tree to traverse?: (1 to 3)
+3
+Which node to display?: (0 for entire tree, 1 to 10)
+5
+Printing tree inorder ...
+Inorder: 40
+Please enter a command:
+1) Build a tree,
+2) Print tree Inorder (full tree or Nth node),
+3) Print tree Postorder (full tree or Nth node),
+4) Count tree leaf nodes,
+5) Swap node children (creates new tree),
+6) Delete tree node (by value),
+7) Compare two trees,
+0) Exit
+0
+Thank you and have a nice day!
