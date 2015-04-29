@@ -1,8 +1,10 @@
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -10,7 +12,6 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Project6 {
@@ -81,10 +82,15 @@ class Driver {
 		return stateNames.get(stateNum);
 	}
 	
-	void printResult(String resultStr)
-	{
+	void printResult(String resultStr, String openStr)
+	{		
 		try
 		{
+			PrintWriter pWriter = new PrintWriter(new BufferedWriter(new FileWriter(outputName,true)));
+
+			System.out.println(openStr);
+			pWriter.println(openStr);
+			
 			StringTokenizer strToken = new StringTokenizer(resultStr);
 			String tmpStr = "";
 			int tmpInt = 0;
@@ -95,10 +101,17 @@ class Driver {
 				if(null != tmpStr)
 				{
 					System.out.println(tmpStr + "->");
+					pWriter.println(tmpStr + "->");
+//					System.out.println(tmpInt + ". " + tmpStr);
+//					pWriter.println(tmpInt + ". " + tmpStr);
 				}
 			}
+			
+			System.out.println();
+			pWriter.println();
+			pWriter.close();
 		}
-		catch(NullPointerException e)
+		catch(NullPointerException|IOException e)
 		{
 	    	System.out.println("Caught Exception: " + e.getMessage());
 	    	e.printStackTrace();
@@ -109,7 +122,7 @@ class Driver {
 	{
 		try
 		{
-			PrintWriter pWriter = new PrintWriter(outputName);
+//			PrintWriter pWriter = new PrintWriter(outputName);
 			aGraph = new adjListGraph(numStates);
 		    FileReader fileRead = new FileReader(inputName);
 	        BufferedReader buffRead = new BufferedReader(fileRead);
@@ -122,7 +135,7 @@ class Driver {
 	        	{
 //	        		System.out.println("State: " + strState);
 	        	}
-	        	pWriter.println("State: " + stateNum);
+//	        	pWriter.println("State: " + stateNum);
 	        	// First in Linked List is State itself, to track if it has been visited
 	        	aGraph.addEdge(stateNum, stateNum);
 	        	// Then add dependencies
@@ -137,7 +150,7 @@ class Driver {
 	        			{
 //	        				System.out.println("Dependency: " + strState);
 	        			}
-	            		pWriter.println("Dependency: " + adjVal);
+//	            		pWriter.println("Dependency: " + adjVal);
 	        		}
 	        		else
 	        		{
@@ -147,7 +160,7 @@ class Driver {
 	        	readBuff = buffRead.readLine();
 	        }
 	        buffRead.close();
-			pWriter.close();
+//			pWriter.close();
 		}
 		catch(IOException|NullPointerException|NoSuchElementException|NumberFormatException e)
 		{
@@ -159,10 +172,10 @@ class Driver {
 	void runDriver()
 	{
 		graphSetup();
-		//String dfsOutput = aGraph.depthFirstSearch();
-		//printResult(dfsOutput);
+		String dfsOutput = aGraph.depthFirstSearch();
+		printResult(dfsOutput, "Depth First Search: ");
 		String bfsOutput = aGraph.breadthFirstSearch();
-		printResult(bfsOutput);
+		printResult(bfsOutput, "Breadth First Search:" );
 	}
 }
 

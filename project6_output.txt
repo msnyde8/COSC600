@@ -1,262 +1,150 @@
-State: 1
-Dependency: 35
-Dependency: 26
-Dependency: 3
-State: 2
-Dependency: 40
-Dependency: 22
-Dependency: 8
-Dependency: 9
-State: 3
-Dependency: 1
-Dependency: 26
-Dependency: 42
-Dependency: 5
-Dependency: 29
-State: 4
-Dependency: 23
-Dependency: 34
-Dependency: 41
-Dependency: 16
-Dependency: 22
-Dependency: 40
-State: 5
-Dependency: 48
-Dependency: 42
-Dependency: 3
-Dependency: 29
-Dependency: 34
-Dependency: 14
-Dependency: 25
-State: 6
-Dependency: 37
-Dependency: 19
-Dependency: 30
-State: 7
-Dependency: 18
-Dependency: 36
-Dependency: 28
-State: 8
-Dependency: 9
-Dependency: 2
-State: 9
-Dependency: 40
-Dependency: 2
-Dependency: 8
-Dependency: 38
-Dependency: 31
-State: 10
-Dependency: 45
-Dependency: 35
-Dependency: 26
-Dependency: 24
-Dependency: 48
-Dependency: 42
-State: 11
-Dependency: 47
-Dependency: 13
-Dependency: 23
-Dependency: 15
-Dependency: 12
-State: 12
-Dependency: 20
-Dependency: 11
-Dependency: 15
-Dependency: 33
-State: 13
-Dependency: 21
-Dependency: 39
-Dependency: 25
-Dependency: 23
-Dependency: 11
-Dependency: 47
-State: 14
-Dependency: 25
-Dependency: 5
-Dependency: 34
-Dependency: 23
-State: 15
-Dependency: 12
-Dependency: 11
-Dependency: 23
-Dependency: 40
-Dependency: 44
-Dependency: 46
-Dependency: 33
-State: 16
-Dependency: 4
-Dependency: 41
-Dependency: 22
-State: 17
-Dependency: 27
-State: 18
-Dependency: 36
-Dependency: 46
-Dependency: 44
-Dependency: 7
-State: 19
-Dependency: 27
-Dependency: 43
-Dependency: 30
-Dependency: 37
-Dependency: 6
-State: 20
-Dependency: 47
-Dependency: 12
-Dependency: 33
-State: 21
-Dependency: 32
-Dependency: 39
-Dependency: 13
-Dependency: 47
-State: 22
-Dependency: 40
-Dependency: 4
-Dependency: 16
-Dependency: 2
-State: 23
-Dependency: 13
-Dependency: 25
-Dependency: 14
-Dependency: 34
-Dependency: 4
-Dependency: 40
-Dependency: 15
-Dependency: 11
-State: 24
-Dependency: 10
-Dependency: 48
-Dependency: 32
-Dependency: 39
-State: 25
-Dependency: 39
-Dependency: 48
-Dependency: 5
-Dependency: 14
-Dependency: 23
-Dependency: 13
-State: 26
-Dependency: 35
-Dependency: 1
-Dependency: 10
-Dependency: 42
-Dependency: 3
-State: 27
-Dependency: 17
-Dependency: 43
-Dependency: 19
-State: 28
-Dependency: 36
-Dependency: 30
-Dependency: 7
-State: 29
-Dependency: 42
-Dependency: 5
-Dependency: 3
-Dependency: 34
-Dependency: 41
-State: 30
-Dependency: 43
-Dependency: 19
-Dependency: 6
-Dependency: 28
-Dependency: 36
-State: 31
-Dependency: 44
-Dependency: 40
-Dependency: 9
-Dependency: 38
-State: 32
-Dependency: 24
-Dependency: 39
-Dependency: 21
-State: 33
-Dependency: 20
-Dependency: 12
-Dependency: 15
-Dependency: 46
-Dependency: 36
-State: 34
-Dependency: 14
-Dependency: 5
-Dependency: 29
-Dependency: 41
-Dependency: 4
-Dependency: 23
-State: 35
-Dependency: 45
-Dependency: 10
-Dependency: 1
-Dependency: 26
-State: 36
-Dependency: 30
-Dependency: 33
-Dependency: 46
-Dependency: 18
-Dependency: 7
-Dependency: 28
-State: 37
-Dependency: 19
-Dependency: 6
-State: 38
-Dependency: 31
-Dependency: 9
-State: 39
-Dependency: 24
-Dependency: 32
-Dependency: 21
-Dependency: 48
-Dependency: 25
-Dependency: 13
-State: 40
-Dependency: 15
-Dependency: 23
-Dependency: 4
-Dependency: 22
-Dependency: 2
-Dependency: 9
-Dependency: 31
-Dependency: 44
-State: 41
-Dependency: 34
-Dependency: 29
-Dependency: 4
-Dependency: 16
-State: 42
-Dependency: 10
-Dependency: 48
-Dependency: 26
-Dependency: 5
-Dependency: 3
-Dependency: 29
-State: 43
-Dependency: 27
-Dependency: 19
-Dependency: 30
-State: 44
-Dependency: 18
-Dependency: 46
-Dependency: 15
-Dependency: 40
-Dependency: 31
-State: 45
-Dependency: 35
-Dependency: 10
-State: 46
-Dependency: 36
-Dependency: 33
-Dependency: 15
-Dependency: 44
-Dependency: 18
-State: 47
-Dependency: 20
-Dependency: 21
-Dependency: 13
-Dependency: 11
-State: 48
-Dependency: 24
-Dependency: 10
-Dependency: 39
-Dependency: 25
-Dependency: 5
-Dependency: 42
+Breadth First Search:
+California->
+Oregon->
+Nevada->
+Arizona->
+Washington->
+Idaho->
+Utah->
+Colorado->
+New Mexico->
+Montana->
+Wyoming->
+Oklahoma->
+Kansas->
+Nebraska->
+Texas->
+North Dakota->
+South Dakota->
+Arkansas->
+Missouri->
+Iowa->
+Louisiana->
+Minnesota->
+Mississippi->
+Tennessee->
+Kentucky->
+Illinois->
+Wisconsin->
+Alabama->
+Georgia->
+North Carolina->
+Virginia->
+Indiana->
+West Virginia->
+Ohio->
+Michigan->
+Florida->
+South Carolina->
+Maryland->
+Pennsylvania->
+Delaware->
+New York->
+New Jersey->
+Vermont->
+Massachusetts->
+Connecticut->
+New Hampshire->
+Rhode Island->
+Maine->
+
+Depth First Search: 
+California->
+Oregon->
+Washington->
+Idaho->
+Nevada->
+Utah->
+Wyoming->
+Montana->
+North Dakota->
+South Dakota->
+Minnesota->
+Iowa->
+Nebraska->
+Colorado->
+Arizona->
+New Mexico->
+Oklahoma->
+Kansas->
+Missouri->
+Arkansas->
+Texas->
+Louisiana->
+Mississippi->
+Tennessee->
+Kentucky->
+Indiana->
+Michigan->
+Wisconsin->
+Illinois->
+Ohio->
+West Virginia->
+Pennsylvania->
+New York->
+Vermont->
+New Hampshire->
+Maine->
+Massachusetts->
+Rhode Island->
+Connecticut->
+New Jersey->
+Delaware->
+Maryland->
+Virginia->
+North Carolina->
+Georgia->
+Alabama->
+Florida->
+South Carolina->
+
+Breadth First Search:
+California->
+Oregon->
+Nevada->
+Arizona->
+Washington->
+Idaho->
+Utah->
+Colorado->
+New Mexico->
+Montana->
+Wyoming->
+Oklahoma->
+Kansas->
+Nebraska->
+Texas->
+North Dakota->
+South Dakota->
+Arkansas->
+Missouri->
+Iowa->
+Louisiana->
+Minnesota->
+Mississippi->
+Tennessee->
+Kentucky->
+Illinois->
+Wisconsin->
+Alabama->
+Georgia->
+North Carolina->
+Virginia->
+Indiana->
+West Virginia->
+Ohio->
+Michigan->
+Florida->
+South Carolina->
+Maryland->
+Pennsylvania->
+Delaware->
+New York->
+New Jersey->
+Vermont->
+Massachusetts->
+Connecticut->
+New Hampshire->
+Rhode Island->
+Maine->
+
