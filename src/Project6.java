@@ -1,4 +1,4 @@
-package project_6;
+
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -80,11 +81,11 @@ class Driver {
 		return stateNames.get(stateNum);
 	}
 	
-	void printDFS(String dfsStr)
+	void printResult(String resultStr)
 	{
 		try
 		{
-			StringTokenizer strToken = new StringTokenizer(dfsStr);
+			StringTokenizer strToken = new StringTokenizer(resultStr);
 			String tmpStr = "";
 			int tmpInt = 0;
 			while(strToken.hasMoreElements())
@@ -158,8 +159,10 @@ class Driver {
 	void runDriver()
 	{
 		graphSetup();
-		String strOutput = aGraph.depthFirstSearch();
-		printDFS(strOutput);
+		//String dfsOutput = aGraph.depthFirstSearch();
+		//printResult(dfsOutput);
+		String bfsOutput = aGraph.breadthFirstSearch();
+		printResult(bfsOutput);
 	}
 }
 
@@ -184,6 +187,7 @@ class adjListGraph
 	private LinkedList<graphNode>[] adjList;
 	private boolean resetGraph = true;
 	private boolean[] nodesVisited;
+	private Queue<graphNode> graphQueue = new LinkedList<graphNode>();
 	adjListGraph(int numNodes)
 	{
 		adjList = new LinkedList[numNodes]; // No sure what warning means ...
@@ -228,7 +232,7 @@ class adjListGraph
 			}
 			if(true == adjList[0].isEmpty())
 			{
-				System.out.println("Error: being state adj list setup not complete");
+				System.out.println("Error: begin state adj list setup not complete");
 				return "";
 			}
 			printStr = graphDFS(adjList[0].get(0), printStr);
@@ -252,6 +256,83 @@ class adjListGraph
 			outputStr = (outputStr + startNode.getNodeVal() + " ");
 //			System.out.println(outputStr);
 			nodesVisited[startNode.getNodeVal()-1] = true;
+
+			ListIterator<graphNode> nodeIter = adjList[(startNode.getNodeVal()-1)].listIterator(1);
+			while(nodeIter.hasNext())
+			{
+				graphNode nextNode = nodeIter.next();
+				if(false == nodesVisited[nextNode.getNodeVal()-1])
+				{
+					outputStr = graphDFS(nextNode, outputStr);
+				}
+			}
+		}
+		catch(ArrayIndexOutOfBoundsException e)
+		{
+	    	System.out.println("Caught Exception: " + e.getMessage());
+	    	e.printStackTrace();
+		}
+		return outputStr;
+	}
+	String breadthFirstSearch()
+	{
+		String printStr = "";
+		try
+		{
+			if(resetGraph == true)
+			{
+				visitReset();
+				resetGraph = false;
+			}
+			if(null == adjList)
+			{
+				System.out.println("Error: graph setup not complete");
+				return "";
+			}
+			if(true == adjList[0].isEmpty())
+			{
+				System.out.println("Error: begin state adj list setup not complete");
+				return "";
+			}
+			printStr = graphBFS(adjList[0].get(0), printStr);
+			resetGraph = true;
+		}
+		catch(ArrayIndexOutOfBoundsException e)
+		{
+	    	System.out.println("Caught Exception: " + e.getMessage());
+	    	e.printStackTrace();
+		}
+		return printStr;
+	}
+	String graphBFS(graphNode startNode, String outputStr)
+	{
+		if(null == startNode)
+		{
+			return outputStr;
+		}
+		
+		graphQueue.add(startNode);
+		outputStr = (outputStr + startNode.getNodeVal() + " ");
+		nodesVisited[startNode.getNodeVal()-1] = true;
+		
+		try
+		{
+			while(false == graphQueue.isEmpty())
+			{
+				graphNode nextNode = graphQueue.remove();
+				
+				ListIterator<graphNode> nodeIter = adjList[(nextNode.getNodeVal()-1)].listIterator(1);
+				while(nodeIter.hasNext())
+				{
+					graphNode adjNode = nodeIter.next();
+					if(false == nodesVisited[adjNode.getNodeVal()-1])
+					{
+						nodesVisited[adjNode.getNodeVal()-1] = true;
+						outputStr = (outputStr + adjNode.getNodeVal() + " ");
+						graphQueue.add(adjNode);
+					}
+				}
+			}
 
 			ListIterator<graphNode> nodeIter = adjList[(startNode.getNodeVal()-1)].listIterator(1);
 			while(nodeIter.hasNext())
