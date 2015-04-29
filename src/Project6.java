@@ -35,9 +35,9 @@ class Driver {
 		aGraph.graphSetup();
 		String [] colorSet = new String [] {"Red","Yellow","Green","Blue"};
 		String dfsOutput = aGraph.depthFirstSearch(colorSet);
-		aGraph.printResult(dfsOutput, "Depth First Search: ");
+		aGraph.printResult(dfsOutput, "Depth First Search: ", false);
 		String bfsOutput = aGraph.breadthFirstSearch();
-		aGraph.printResult(bfsOutput, "Breadth First Search:" );
+		aGraph.printResult(bfsOutput, "Breadth First Search:", true);
 	}
 }
 
@@ -337,11 +337,11 @@ class adjListGraph
 		}
 	}
 	
-	void printResult(String resultStr, String openStr)
+	void printResult(String resultStr, String openStr, boolean appendFlag)
 	{		
 		try
 		{
-			PrintWriter pWriter = new PrintWriter(new BufferedWriter(new FileWriter(outputName,true)));
+			PrintWriter pWriter = new PrintWriter(new BufferedWriter(new FileWriter(outputName,appendFlag)));
 
 			System.out.println(openStr);
 			pWriter.println(openStr);
