@@ -34,9 +34,10 @@ class Driver {
 		aGraph = new adjListGraph(numStates);
 		aGraph.graphSetup();
 		String [] colorSet = new String [] {"Red","Yellow","Green","Blue"};
-		String dfsOutput = aGraph.depthFirstSearch(colorSet);
+		aGraph.setupColors(colorSet);
+		String dfsOutput = aGraph.graphSearch(true);
 		aGraph.printResult(dfsOutput, "Depth First Search: ", false);
-		String bfsOutput = aGraph.breadthFirstSearch();
+		String bfsOutput = aGraph.graphSearch(false);
 		aGraph.printResult(bfsOutput, "Breadth First Search:", true);
 	}
 }
@@ -44,11 +45,15 @@ class Driver {
 class graphNode
 {
 	private int nodeVal;
+	private LinkedList<Integer> adjList = new LinkedList<Integer>();
 	private String nodeColor = "";
 	
 	graphNode(int newVal)
 	{
 		nodeVal = newVal;
+	}
+	public LinkedList<Integer> getAdjList() {
+		return adjList;
 	}
 	public int getNodeVal()
 	{
@@ -68,19 +73,19 @@ class adjListGraph
 {
 	private String inputName = Project6.pathName + "project6_input.txt";
 	private String outputName = Project6.pathName + "project6_output.txt";
-	private LinkedList<graphNode>[] adjList;
+	private graphNode[] nodeList;
 	private boolean resetGraph = true;
 	private boolean[] nodesVisited;
 	private String[] graphColors;
-	private Queue<graphNode> graphQueue = new LinkedList<graphNode>();
+	private Queue<Integer> graphQueue = new LinkedList<Integer>();
 	private StateNames nodeStates = new StateNames();
 	
 	adjListGraph(int numNodes)
 	{
-		adjList = new LinkedList[numNodes]; // No sure what warning means ...
+		nodeList = new graphNode[numNodes]; // No sure what warning means ...
 		for(int i = 0; i < numNodes; ++i)
 		{
-			adjList[i] = new LinkedList<graphNode>();
+			nodeList[i] = new graphNode((i+1));
 		}
 		nodesVisited = new boolean[numNodes];
 		visitReset();
@@ -103,7 +108,7 @@ class adjListGraph
 	        	}
 //	        	pWriter.println("State: " + stateNum);
 	        	// First in Linked List is State itself, to track if it has been visited
-	        	addEdge(stateNum, stateNum);
+	        	//addEdge(stateNum, stateNum);
 	        	// Then add dependencies
 	        	StringTokenizer strToken = new StringTokenizer(readBuff," ,");
 	        	while(strToken.hasMoreElements())
@@ -137,28 +142,31 @@ class adjListGraph
 	
 	boolean addEdge(int stateNum, int nodeVal)
 	{
-		if((stateNum < 1) || (stateNum > adjList.length))
+		if((stateNum < 1) || (stateNum > nodeList.length))
 		{
 			return false;
 		}
 		graphNode gNode = new graphNode(nodeVal);
-		return adjList[(stateNum-1)].add(gNode);
+		return nodeList[(stateNum-1)].getAdjList().add(gNode.getNodeVal());
 	}
 	
 	void visitReset()
 	{
-		for(int i = 0; i < adjList.length; ++i)
+		for(int i = 0; i < nodesVisited.length; ++i)
 		{
 			nodesVisited[i] = false;
 		}
 	}
 	
-	String depthFirstSearch(String [] colorArray)
+	void setupColors(String [] colorArray)
 	{
-		String printStr = "";
-		
 		graphColors = new String [colorArray.length];
 		System.arraycopy(colorArray, 0, graphColors, 0, colorArray.length);
+	}
+	
+	String graphSearch(boolean dfs)
+	{
+		String printStr = "";
 		
 		try
 		{
@@ -167,17 +175,24 @@ class adjListGraph
 				visitReset();
 				resetGraph = false;
 			}
-			if(null == adjList)
+			if(null == nodeList)
 			{
 				System.out.println("Error: graph setup not complete");
 				return "";
 			}
-			if(true == adjList[0].isEmpty())
+			if(true == nodeList[0].getAdjList().isEmpty())
 			{
 				System.out.println("Error: begin state adj list setup not complete");
 				return "";
 			}
-			printStr = graphDFS(adjList[0].get(0), printStr);
+			if(true == dfs)
+			{
+				printStr = graphDFS(nodeList[0], printStr);
+			}
+			else
+			{
+				printStr = graphBFS(nodeList[0], printStr);
+			}
 			resetGraph = true;
 		}
 		catch(ArrayIndexOutOfBoundsException e)
@@ -187,7 +202,8 @@ class adjListGraph
 		}
 		return printStr;
 	}
-	String graphDFS(graphNode startNode, String outputStr)
+	
+	private String graphDFS(graphNode startNode, String outputStr)
 	{
 		if(null == startNode)
 		{
@@ -195,18 +211,19 @@ class adjListGraph
 		}
 		try
 		{
-			outputStr = (outputStr + startNode.getNodeVal() + " ");
+			int startVal = startNode.getNodeVal();
+			outputStr = (outputStr + startVal + " ");
 //			System.out.println(outputStr);
-			nodesVisited[startNode.getNodeVal()-1] = true;
-			colorNode(adjList[(startNode.getNodeVal()-1)].get(0));
+			nodesVisited[startVal-1] = true;
+			colorNode(nodeList[(startVal-1)]);
 
-			ListIterator<graphNode> nodeIter = adjList[(startNode.getNodeVal()-1)].listIterator(1);
+			ListIterator<Integer> nodeIter = nodeList[(startVal-1)].getAdjList().listIterator();
 			while(nodeIter.hasNext())
 			{
-				graphNode nextNode = nodeIter.next();
-				if(false == nodesVisited[nextNode.getNodeVal()-1])
+				int nextVal = nodeIter.next();
+				if(false == nodesVisited[nextVal-1])
 				{
-					outputStr = graphDFS(nextNode, outputStr);
+					outputStr = graphDFS(nodeList[(nextVal-1)], outputStr);
 				}
 			}
 		}
@@ -218,74 +235,46 @@ class adjListGraph
 		return outputStr;
 	}
 	
-	String breadthFirstSearch()
-	{
-		String printStr = "";
-		try
-		{
-			if(resetGraph == true)
-			{
-				visitReset();
-				resetGraph = false;
-			}
-			if(null == adjList)
-			{
-				System.out.println("Error: graph setup not complete");
-				return "";
-			}
-			if(true == adjList[0].isEmpty())
-			{
-				System.out.println("Error: begin state adj list setup not complete");
-				return "";
-			}
-			printStr = graphBFS(adjList[0].get(0), printStr);
-			resetGraph = true;
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-	    	System.out.println("Caught Exception: " + e.getMessage());
-	    	e.printStackTrace();
-		}
-		return printStr;
-	}
-	String graphBFS(graphNode startNode, String outputStr)
+	private String graphBFS(graphNode startNode, String outputStr)
 	{
 		if(null == startNode)
 		{
 			return outputStr;
 		}
 		
-		graphQueue.add(startNode);
-		outputStr = (outputStr + startNode.getNodeVal() + " ");
-		nodesVisited[startNode.getNodeVal()-1] = true;
-		colorNode(adjList[(startNode.getNodeVal()-1)].get(0));
+		int startVal = startNode.getNodeVal();
+		graphQueue.add(startVal);
+		outputStr = (outputStr + startVal + " ");
+		nodesVisited[startVal-1] = true;
+		colorNode(nodeList[(startVal-1)]);
 		
 		try
 		{
 			while(false == graphQueue.isEmpty())
 			{
-				graphNode nextNode = graphQueue.remove();
+				int nextVal = graphQueue.remove();
 				
-				ListIterator<graphNode> nodeIter = adjList[(nextNode.getNodeVal()-1)].listIterator(1);
+				ListIterator<Integer> nodeIter = nodeList[(nextVal-1)].getAdjList().listIterator(0);
 				while(nodeIter.hasNext())
 				{
-					graphNode adjNode = nodeIter.next();
-					if(false == nodesVisited[adjNode.getNodeVal()-1])
+					int adjNode = nodeIter.next();
+					//int adjVal = adjNode.getNodeVal();
+					if(false == nodesVisited[adjNode-1])
 					{
-						nodesVisited[adjNode.getNodeVal()-1] = true;
-						outputStr = (outputStr + adjNode.getNodeVal() + " ");
+						nodesVisited[adjNode-1] = true;
+						outputStr = (outputStr + adjNode + " ");
 						graphQueue.add(adjNode);
 					}
 				}
 			}
 
-			ListIterator<graphNode> nodeIter = adjList[(startNode.getNodeVal()-1)].listIterator(1);
+			ListIterator<Integer> nodeIter = nodeList[(startVal-1)].getAdjList().listIterator(0);
 			while(nodeIter.hasNext())
 			{
-				graphNode nextNode = nodeIter.next();
-				if(false == nodesVisited[nextNode.getNodeVal()-1])
+				int nextNode = nodeIter.next();
+				if(false == nodesVisited[nextNode-1])
 				{
-					outputStr = graphDFS(nextNode, outputStr);
+					outputStr = graphDFS(nodeList[(nextNode-1)], outputStr);
 				}
 			}
 		}
@@ -312,11 +301,11 @@ class adjListGraph
 			boolean foundColor = false;
 			for(int i = 0; i < graphColors.length; ++i)
 			{
-				ListIterator<graphNode> nodeIter = adjList[(colorNode.getNodeVal()-1)].listIterator(1);
+				ListIterator<Integer> nodeIter = nodeList[(colorNode.getNodeVal()-1)].getAdjList().listIterator(0);
 				while((nodeIter.hasNext()) && (false == foundColor))
 				{
-					int adjNodeVal = nodeIter.next().getNodeVal();
-					graphNode adjNode = adjList[(adjNodeVal-1)].get(0);
+					int adjNodeVal = nodeIter.next();
+					graphNode adjNode = nodeList[(adjNodeVal-1)];
 					if(0 == graphColors[i].compareToIgnoreCase(adjNode.getNodeColor()))
 					{
 						foundColor = true;
@@ -355,8 +344,8 @@ class adjListGraph
 				tmpStr = nodeStates.getStateName(tmpInt);
 				if(null != tmpStr)
 				{
-					System.out.println(tmpStr + "->" + adjList[tmpInt-1].get(0).getNodeColor());
-					pWriter.println(tmpStr + "->" + adjList[tmpInt-1].get(0).getNodeColor());
+					System.out.println(tmpStr + "->" + nodeList[tmpInt-1].getNodeColor());
+					pWriter.println(tmpStr + "->" + nodeList[tmpInt-1].getNodeColor());
 //					System.out.println(tmpInt + ". " + tmpStr);
 //					pWriter.println(tmpInt + ". " + tmpStr);
 				}
@@ -392,8 +381,7 @@ class StateNames
 	{
 		try
 		{
-			FileReader fileRead = new FileReader(inputStateName);
-			BufferedReader buffRead = new BufferedReader(fileRead);
+			BufferedReader buffRead = new BufferedReader(new FileReader(inputStateName));
 			String readBuff = buffRead.readLine();
 			while(null != readBuff)
 			{

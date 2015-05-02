@@ -1,0 +1,49 @@
+Depth First Search: 
+ 1. California
+35. Oregon
+45. Washington
+10. Idaho
+26. Nevada
+42. Utah
+48. Wyoming
+24. Montana
+32. North Dakota
+39. South Dakota
+21. Minnesota
+13. Iowa
+25. Nebraska
+ 5. Colorado
+ 3. Arizona
+29. New Mexico
+34. Oklahoma
+14. Kansas
+23. Missouri
+ 4. Arkansas
+41. Texas
+16. Louisiana
+22. Mississippi
+40. Tennessee
+15. Kentucky
+12. Indiana
+20. Michigan
+47. Wisconsin
+11. Illinois
+33. Ohio
+46. West Virginia
+36. Pennsylvania
+30. New York
+43. Vermont
+27. New Hampshire
+17. Maine
+19. Massachusetts
+37. Rhode Island
+ 6. Connecticut
+28. New Jersey
+ 7. Delaware
+18. Maryland
+44. Virginia
+31. North Carolina
+ 9. Georgia
+ 2. Alabama
+ 8. Florida
+38. South Carolina
