@@ -35,10 +35,10 @@ class Driver {
 		aGraph.graphSetup();
 		String [] colorSet = new String [] {"Red","Yellow","Green","Blue"};
 		aGraph.setupColors(colorSet);
-		//String dfsOutput = aGraph.graphSearch(true);
-		//aGraph.printResult(dfsOutput, "Depth First Search: ", false);
+		String dfsOutput = aGraph.graphSearch(true);
+		aGraph.printResult(dfsOutput, "Depth First Search: ", false);
 		String bfsOutput = aGraph.graphSearch(false);
-		aGraph.printResult(bfsOutput, "Breadth First Search:", false);
+		aGraph.printResult(bfsOutput, "Breadth First Search:", true);
 	}
 }
 

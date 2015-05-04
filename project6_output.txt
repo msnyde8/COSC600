@@ -1,3 +1,53 @@
+Depth First Search: 
+California: Color->Red, Level->0
+Oregon: Color->Yellow, Level->1
+Washington: Color->Red, Level->2
+Idaho: Color->Green, Level->3
+Nevada: Color->Blue, Level->4
+Utah: Color->Red, Level->5
+Wyoming: Color->Yellow, Level->6
+Montana: Color->Red, Level->7
+North Dakota: Color->Yellow, Level->8
+South Dakota: Color->Green, Level->9
+Minnesota: Color->Red, Level->10
+Iowa: Color->Yellow, Level->11
+Nebraska: Color->Red, Level->12
+Colorado: Color->Green, Level->13
+Arizona: Color->Yellow, Level->14
+New Mexico: Color->Blue, Level->15
+Oklahoma: Color->Red, Level->16
+Kansas: Color->Yellow, Level->17
+Missouri: Color->Green, Level->18
+Arkansas: Color->Yellow, Level->19
+Texas: Color->Green, Level->20
+Louisiana: Color->Red, Level->21
+Mississippi: Color->Green, Level->22
+Tennessee: Color->Red, Level->23
+Kentucky: Color->Yellow, Level->24
+Indiana: Color->Red, Level->25
+Michigan: Color->Yellow, Level->26
+Wisconsin: Color->Green, Level->27
+Illinois: Color->Blue, Level->28
+Ohio: Color->Green, Level->27
+West Virginia: Color->Red, Level->28
+Pennsylvania: Color->Yellow, Level->29
+New York: Color->Red, Level->30
+Vermont: Color->Yellow, Level->31
+New Hampshire: Color->Red, Level->32
+Maine: Color->Yellow, Level->33
+Massachusetts: Color->Green, Level->33
+Rhode Island: Color->Red, Level->34
+Connecticut: Color->Yellow, Level->35
+New Jersey: Color->Green, Level->31
+Delaware: Color->Red, Level->32
+Maryland: Color->Green, Level->33
+Virginia: Color->Blue, Level->34
+North Carolina: Color->Yellow, Level->35
+Georgia: Color->Green, Level->36
+Alabama: Color->Yellow, Level->37
+Florida: Color->Red, Level->38
+South Carolina: Color->Red, Level->37
+
 Breadth First Search:
 California: Color->Red, Level->0
 Oregon: Color->Yellow, Level->1
