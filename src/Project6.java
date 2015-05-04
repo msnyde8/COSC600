@@ -35,18 +35,19 @@ class Driver {
 		aGraph.graphSetup();
 		String [] colorSet = new String [] {"Red","Yellow","Green","Blue"};
 		aGraph.setupColors(colorSet);
-		String dfsOutput = aGraph.graphSearch(true);
-		aGraph.printResult(dfsOutput, "Depth First Search: ", false);
+		//String dfsOutput = aGraph.graphSearch(true);
+		//aGraph.printResult(dfsOutput, "Depth First Search: ", false);
 		String bfsOutput = aGraph.graphSearch(false);
-		aGraph.printResult(bfsOutput, "Breadth First Search:", true);
+		aGraph.printResult(bfsOutput, "Breadth First Search:", false);
 	}
 }
 
 class graphNode
 {
-	private int nodeVal;
+	private int nodeVal = -1;
 	private LinkedList<Integer> adjList = new LinkedList<Integer>();
 	private String nodeColor = "";
+	private int nodeLevel = -1;
 	
 	graphNode(int newVal)
 	{
@@ -66,6 +67,14 @@ class graphNode
 	public String getNodeColor()
 	{
 		return nodeColor;
+	}
+	public void setNodeLevel(int newLevel)
+	{
+		nodeLevel = newLevel;
+	}
+	public int getNodeLevel()
+	{
+		return nodeLevel;
 	}
 }
 
@@ -158,6 +167,14 @@ class adjListGraph
 		}
 	}
 	
+	void graphNodeReset()
+	{
+		for(int i = 0; i < nodeList.length; ++i)
+		{
+			nodeList[i].setNodeColor("");
+			nodeList[i].setNodeLevel(-1);
+		}
+	}	
 	void setupColors(String [] colorArray)
 	{
 		graphColors = new String [colorArray.length];
@@ -173,6 +190,7 @@ class adjListGraph
 			if(resetGraph == true)
 			{
 				visitReset();
+				graphNodeReset();
 				resetGraph = false;
 			}
 			if(null == nodeList)
@@ -187,11 +205,11 @@ class adjListGraph
 			}
 			if(true == dfs)
 			{
-				printStr = graphDFS(nodeList[0], printStr);
+				printStr = graphDFS(nodeList[0], printStr, 0);
 			}
 			else
 			{
-				printStr = graphBFS(nodeList[0], printStr);
+				printStr = graphBFS(nodeList[0], printStr, 0);
 			}
 			resetGraph = true;
 		}
@@ -203,7 +221,7 @@ class adjListGraph
 		return printStr;
 	}
 	
-	private String graphDFS(graphNode startNode, String outputStr)
+	private String graphDFS(graphNode startNode, String outputStr, int graphLevel)
 	{
 		if(null == startNode)
 		{
@@ -216,6 +234,7 @@ class adjListGraph
 //			System.out.println(outputStr);
 			nodesVisited[startVal-1] = true;
 			colorNode(nodeList[(startVal-1)]);
+			nodeList[(startVal-1)].setNodeLevel(graphLevel);
 
 			ListIterator<Integer> nodeIter = nodeList[(startVal-1)].getAdjList().listIterator();
 			while(nodeIter.hasNext())
@@ -223,7 +242,7 @@ class adjListGraph
 				int nextVal = nodeIter.next();
 				if(false == nodesVisited[nextVal-1])
 				{
-					outputStr = graphDFS(nodeList[(nextVal-1)], outputStr);
+					outputStr = graphDFS(nodeList[(nextVal-1)], outputStr, (graphLevel + 1));
 				}
 			}
 		}
@@ -235,7 +254,7 @@ class adjListGraph
 		return outputStr;
 	}
 	
-	private String graphBFS(graphNode startNode, String outputStr)
+	private String graphBFS(graphNode startNode, String outputStr, int graphLevel)
 	{
 		if(null == startNode)
 		{
@@ -247,7 +266,10 @@ class adjListGraph
 		outputStr = (outputStr + startVal + " ");
 		nodesVisited[startVal-1] = true;
 		colorNode(nodeList[(startVal-1)]);
+		nodeList[(startVal-1)].setNodeLevel(graphLevel);
+		graphLevel++;
 		
+		boolean increaseLevel = false;		
 		try
 		{
 			while(false == graphQueue.isEmpty())
@@ -263,20 +285,28 @@ class adjListGraph
 					{
 						nodesVisited[adjNode-1] = true;
 						outputStr = (outputStr + adjNode + " ");
+						colorNode(nodeList[(adjNode-1)]);
+						nodeList[(adjNode-1)].setNodeLevel(graphLevel);
 						graphQueue.add(adjNode);
+						increaseLevel = true;
 					}
+				}
+				if(true == increaseLevel)
+				{
+					graphLevel++;
+					increaseLevel = false;
 				}
 			}
 
-			ListIterator<Integer> nodeIter = nodeList[(startVal-1)].getAdjList().listIterator(0);
+/*			ListIterator<Integer> nodeIter = nodeList[(startVal-1)].getAdjList().listIterator(0);
 			while(nodeIter.hasNext())
 			{
 				int nextNode = nodeIter.next();
 				if(false == nodesVisited[nextNode-1])
 				{
-					outputStr = graphDFS(nodeList[(nextNode-1)], outputStr);
+					outputStr = graphBFS(nodeList[(nextNode-1)], outputStr, (graphLevel+1));
 				}
-			}
+			}*/
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{
@@ -344,8 +374,8 @@ class adjListGraph
 				tmpStr = nodeStates.getStateName(tmpInt);
 				if(null != tmpStr)
 				{
-					System.out.println(tmpStr + "->" + nodeList[tmpInt-1].getNodeColor());
-					pWriter.println(tmpStr + "->" + nodeList[tmpInt-1].getNodeColor());
+					System.out.println(tmpStr + ": Color->" + nodeList[tmpInt-1].getNodeColor() + ", Level->" + nodeList[tmpInt-1].getNodeLevel());
+					pWriter.println(tmpStr + ": Color->" + nodeList[tmpInt-1].getNodeColor() + ", Level->" + nodeList[tmpInt-1].getNodeLevel());
 //					System.out.println(tmpInt + ". " + tmpStr);
 //					pWriter.println(tmpInt + ". " + tmpStr);
 				}
